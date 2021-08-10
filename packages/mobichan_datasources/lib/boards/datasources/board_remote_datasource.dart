@@ -24,10 +24,13 @@ class JsonDecodeException implements Exception {}
 class JsonDeserializationException implements Exception {}
 
 class BoardRemoteDatasource {
-  BoardRemoteDatasource({http.Client? httpClient})
-      : _httpClient = httpClient ?? http.Client();
+  BoardRemoteDatasource({http.Client? httpClient, JsonCodec? jsonCodec}) {
+    _httpClient = httpClient ?? http.Client();
+    _jsonCodec = jsonCodec ?? JsonCodec();
+  }
 
-  final http.Client _httpClient;
+  late http.Client _httpClient;
+  late JsonCodec _jsonCodec;
 
   /// Fetches a list of all boards from the https://a.4cdn.org/boards.json endpoint.
   ///
@@ -48,7 +51,7 @@ class BoardRemoteDatasource {
     List boards;
 
     try {
-      boards = json.decode(response.body)["boards"] as List;
+      boards = _jsonCodec.decode(response.body)["boards"] as List;
     } on Exception {
       throw JsonDecodeException();
     }

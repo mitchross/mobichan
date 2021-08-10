@@ -6,15 +6,19 @@ import 'package:mobichan_datasources/boards/models/board.dart';
 
 class BoardRepository {
   BoardRepository({
-    required this.remoteDatasource,
-    required this.localDatasource,
-  });
+    BoardRemoteDatasource? remoteDatasource,
+    BoardLocalDatasource? localDatasource,
+  }) {
+    _remoteDatasource = remoteDatasource ?? BoardRemoteDatasource();
+    _localDatasource = localDatasource ?? BoardLocalDatasource();
+  }
 
-  final BoardRemoteDatasource remoteDatasource;
-  final BoardLocalDatasource localDatasource;
+  late BoardRemoteDatasource _remoteDatasource;
+  late BoardLocalDatasource _localDatasource;
 
-  Future<List<Board>> search(String? searchTerm) async {
-    List<Board> boards = await remoteDatasource.boards();
+  ///
+  Future<List<Board>> search({String? searchTerm}) async {
+    List<Board> boards = await _remoteDatasource.boards();
 
     if (searchTerm == null) {
       return boards;

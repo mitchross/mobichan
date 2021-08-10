@@ -9,20 +9,29 @@ import 'package:test/test.dart';
 import '../../fixtures/fixture_reader.dart';
 
 class MockBoardRemoteDatasource extends BoardRemoteDatasource implements Mock {
-  MockBoardRemoteDatasource({required http.Client httpClient})
-      : super(httpClient: httpClient);
+  MockBoardRemoteDatasource(
+      {required http.Client httpClient, required JsonCodec jsonCodec})
+      : super(httpClient: httpClient, jsonCodec: jsonCodec);
 }
 
 class MockHttpClient extends Mock implements http.Client {}
 
+class MockJsonCodec extends Mock implements JsonCodec {}
+
 void main() {
   late BoardRemoteDatasource datasource;
   late http.Client httpClient;
+  late JsonCodec jsonCodec;
 
   setUp(() {
-    httpClient = MockHttpClient();
-    datasource = MockBoardRemoteDatasource(httpClient: httpClient);
     registerFallbackValue(Uri());
+
+    httpClient = MockHttpClient();
+    jsonCodec = MockJsonCodec();
+    datasource = MockBoardRemoteDatasource(
+      httpClient: httpClient,
+      jsonCodec: jsonCodec,
+    );
   });
 
   group('boards', () {
@@ -42,11 +51,23 @@ void main() {
       },
     );
     test(
+      'should throw a JsonDecodeException when decoding the response is unsuccessful',
+      () {
+        when(() => httpClient.get(any())).thenAnswer(
+          (_) async => http.Response(fixture('boards.json'), 200),
+        );
+        when(() => jsonCodec.decode(any())).thenThrow(Exception());
+        expect(() => datasource.boards(), throwsA(isA<JsonDecodeException>()));
+      },
+    );
+    test(
       'should return a list of boards',
       () async {
         when(() => httpClient.get(any())).thenAnswer(
           (_) async => http.Response(fixture('boards.json'), 200),
         );
+        when(() => jsonCodec.decode(any()))
+            .thenReturn(json.decode(fixture('boards.json')));
 
         final boards = await datasource.boards();
         final expectedBoards =

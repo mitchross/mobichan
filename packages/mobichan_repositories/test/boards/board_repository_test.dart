@@ -23,7 +23,9 @@ void main() {
     localDatasource = MockLocalDatasource();
 
     repository = BoardRepository(
-        remoteDatasource: remoteDatasource, localDatasource: localDatasource);
+      remoteDatasource: remoteDatasource,
+      localDatasource: localDatasource,
+    );
   });
 
   group('search', () {
@@ -34,11 +36,11 @@ void main() {
     final tBoardCode = "g";
 
     test(
-      'should return all boards when the search term is null',
+      'should return all boards when no search term is passed',
       () async {
         when(() => remoteDatasource.boards()).thenAnswer((_) async => tBoards);
 
-        final boards = await repository.search(null);
+        final boards = await repository.search();
 
         expect(boards, equals(tBoards));
       },
@@ -48,7 +50,7 @@ void main() {
       () async {
         when(() => remoteDatasource.boards()).thenAnswer((_) async => tBoards);
 
-        final boards = await repository.search(tSearchTerm);
+        final boards = await repository.search(searchTerm: tSearchTerm);
 
         final expectedBoards =
             tBoards.where((board) => board.board == tBoardCode).toList();
