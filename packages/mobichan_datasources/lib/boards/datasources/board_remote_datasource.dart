@@ -32,34 +32,7 @@ class BoardRemoteDatasource {
   /// Fetches a list of all boards from the https://a.4cdn.org/boards.json endpoint.
   ///
   /// Returns a list of [Board] models.
-  Future<List<Board>> boards(String? searchTerm) async {
-    List<Board> boards;
-
-    try {
-      boards = await _fetchBoards();
-    } catch (exception) {
-      throw exception;
-    }
-
-    if (searchTerm == null) {
-      return boards;
-    }
-
-    return boards
-        .where((board) =>
-            _matchesSearchTerm(searchTerm, board.board) ||
-            _matchesSearchTerm(searchTerm, board.title))
-        .toList();
-  }
-
-  bool _matchesSearchTerm(String searchTerm, String? field) {
-    if (field == null) {
-      return false;
-    }
-    return field.toLowerCase().contains(searchTerm.toLowerCase());
-  }
-
-  Future<List<Board>> _fetchBoards() async {
+  Future<List<Board>> boards() async {
     http.Response response;
 
     try {

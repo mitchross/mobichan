@@ -30,7 +30,7 @@ void main() {
       'should throw an HttpException when the GET request is unsuccessful',
       () {
         when(() => httpClient.get(any())).thenThrow(Exception());
-        expect(() => datasource.boards(null), throwsA(isA<HttpException>()));
+        expect(() => datasource.boards(), throwsA(isA<HttpException>()));
       },
     );
     test(
@@ -38,38 +38,20 @@ void main() {
       () {
         when(() => httpClient.get(any()))
             .thenAnswer((_) async => http.Response("Error", 404));
-        expect(
-            () => datasource.boards(null), throwsA(isA<HttpRequestFailure>()));
+        expect(() => datasource.boards(), throwsA(isA<HttpRequestFailure>()));
       },
     );
     test(
-      'should return all boards when no arguments are passed',
+      'should return a list of boards',
       () async {
         when(() => httpClient.get(any())).thenAnswer(
           (_) async => http.Response(fixture('boards.json'), 200),
         );
 
-        final boards = await datasource.boards(null);
+        final boards = await datasource.boards();
         final expectedBoards =
             (json.decode(fixture('boards.json'))["boards"] as List)
                 .map((e) => Board.fromJson(e))
-                .toList();
-
-        expect(boards, equals(expectedBoards));
-      },
-    );
-    test(
-      'should return a subset of boards when a search term is passed as an argument',
-      () async {
-        when(() => httpClient.get(any())).thenAnswer(
-          (_) async => http.Response(fixture('boards.json'), 200),
-        );
-
-        final boards = await datasource.boards("technology");
-        final expectedBoards =
-            (json.decode(fixture('boards.json'))["boards"] as List)
-                .map((e) => Board.fromJson(e))
-                .where((board) => board.board == "g")
                 .toList();
 
         expect(boards, equals(expectedBoards));
