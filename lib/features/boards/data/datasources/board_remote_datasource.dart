@@ -3,7 +3,7 @@ library mobichan_datasources;
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobichan_datasources/boards/models/board.dart';
+import 'package:mobichan/features/boards/data/models/board.dart';
 
 const String BOARDS_URL = "https://a.4cdn.org/boards.json";
 

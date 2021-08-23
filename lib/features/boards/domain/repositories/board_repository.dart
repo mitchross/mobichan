@@ -1,8 +1,8 @@
-library mobichan_repository;
+library mobichan_repositories;
 
-import 'package:mobichan_datasources/boards/datasources/board_local_datasource.dart';
-import 'package:mobichan_datasources/boards/datasources/board_remote_datasource.dart';
-import 'package:mobichan_datasources/boards/models/board.dart';
+import 'package:mobichan/features/boards/data/datasources/board_local_datasource.dart';
+import 'package:mobichan/features/boards/data/datasources/board_remote_datasource.dart';
+import 'package:mobichan/features/boards/data/models/board.dart';
 
 class BoardRepository {
   BoardRepository({

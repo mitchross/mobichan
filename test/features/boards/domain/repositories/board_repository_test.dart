@@ -1,13 +1,13 @@
 import 'dart:convert';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:mobichan_datasources/boards/datasources/board_local_datasource.dart';
-import 'package:mobichan_datasources/boards/datasources/board_remote_datasource.dart';
-import 'package:mobichan_datasources/boards/models/board.dart';
-import 'package:mobichan_repositories/boards/board_repository.dart';
+import 'package:mobichan/features/boards/data/datasources/board_local_datasource.dart';
+import 'package:mobichan/features/boards/data/datasources/board_remote_datasource.dart';
+import 'package:mobichan/features/boards/data/models/board.dart';
+import 'package:mobichan/features/boards/domain/repositories/board_repository.dart';
 import 'package:mocktail/mocktail.dart';
 
-import '../fixtures/fixture_reader.dart';
+import '../../../../fixtures/fixture_reader.dart';
 
 class MockRemoteDatasource extends Mock implements BoardRemoteDatasource {}
 

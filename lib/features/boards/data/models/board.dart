@@ -81,27 +81,5 @@ class Board extends Equatable {
   }
 
   @override
-  List<Object?> get props => [
-        board,
-        title,
-        wsBoard,
-        perPage,
-        pages,
-        maxFileSize,
-        maxWebmFileSize,
-        maxCommentChars,
-        maxWebmDuration,
-        bumpLimit,
-        imageLimit,
-        threadsCooldown,
-        repliesCooldown,
-        imagesCooldown,
-        metaDescription,
-        isArchived,
-        forcedAnon,
-        countryFlags,
-        userIds,
-        spoilers,
-        customSpoilers,
-      ];
+  List<Object?> get props => [board, title];
 }

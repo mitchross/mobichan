@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobichan/api/api.dart';
 import 'package:mobichan/classes/arguments/board_page_arguments.dart';
 import 'package:mobichan/classes/models/board.dart';
 import 'package:mobichan/constants.dart';
+import 'package:mobichan/features/boards/domain/repositories/board_repository.dart';
+import 'package:mobichan/features/boards/ui/bloc/board_bloc.dart';
 import 'package:mobichan/pages/board_page.dart';
 import 'package:mobichan/utils/utils.dart';
 
@@ -64,27 +67,64 @@ class _BoardsListPageState extends State<BoardsListPage> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: _isSearching
-            ? TextField(
-                controller: _searchQueryController,
-                onChanged: _updateSearchQuery,
-                decoration: InputDecoration(
-                  hintText: 'Search...',
-                ),
-                autofocus: true,
-              )
-            : Text('Boards'),
-        leading: _isSearching ? BackButton() : null,
-        actions: [
-          IconButton(
-            onPressed: _startSearching,
-            icon: Icon(Icons.search_rounded),
-          ),
-        ],
+    return BlocProvider(
+      create: (context) {
+        return BoardBloc(context.read<BoardRepository>());
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: _isSearching
+              ? TextField(
+                  controller: _searchQueryController,
+                  onChanged: (newQuery) {
+                    _updateSearchQuery(newQuery);
+                    context.read<BoardBloc>().add(SearchTermChanged(newQuery));
+                  },
+                  decoration: InputDecoration(
+                    hintText: 'Search...',
+                  ),
+                  autofocus: true,
+                )
+              : Text('Boards'),
+          leading: _isSearching ? BackButton() : null,
+          actions: [
+            IconButton(
+              onPressed: _startSearching,
+              icon: Icon(Icons.search_rounded),
+            ),
+          ],
+        ),
+        body: BlocConsumer<BoardBloc, BoardState>(
+          listenWhen: (previous, current) => previous.status != current.status,
+          listener: (context, state) {
+            print("listening");
+            if (state.status == BoardStatus.failure) {
+              ScaffoldMessenger.of(context)
+                ..hideCurrentSnackBar()
+                ..showSnackBar(
+                  const SnackBar(content: Text('Failed to fetch boards')),
+                );
+            }
+          },
+          builder: (context, state) {
+            print(state.status);
+            switch (state.status) {
+              case BoardStatus.loading:
+                return Center(
+                  child: CircularProgressIndicator(),
+                );
+              case BoardStatus.success:
+                return ListView.builder(itemBuilder: (context, index) {
+                  print(state.boards);
+                  final board = state.boards[index];
+                  return Text(board.title);
+                });
+              default:
+                return Container();
+            }
+          },
+        ),
       ),
-      body: buildFutureBuilder(),
     );
   }
 

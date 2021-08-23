@@ -1,12 +1,12 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mobichan_datasources/boards/datasources/board_remote_datasource.dart';
-import 'package:mobichan_datasources/boards/models/board.dart';
+import 'package:mobichan/features/boards/data/datasources/board_remote_datasource.dart';
+import 'package:mobichan/features/boards/data/models/board.dart';
 import 'package:mocktail/mocktail.dart';
 import 'package:test/test.dart';
 
-import '../../fixtures/fixture_reader.dart';
+import '../../../../fixtures/fixture_reader.dart';
 
 class MockBoardRemoteDatasource extends BoardRemoteDatasource implements Mock {
   MockBoardRemoteDatasource(
