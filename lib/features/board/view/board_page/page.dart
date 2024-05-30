@@ -9,7 +9,7 @@ import 'package:mobichan/features/board/board.dart';
 class BoardPage extends StatelessWidget {
   final bool showWarning;
 
-  const BoardPage({this.showWarning = false, Key? key}) : super(key: key);
+  const BoardPage({this.showWarning = false, super.key});
 
   @override
   Widget build(BuildContext context) {

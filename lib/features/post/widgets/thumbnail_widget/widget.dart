@@ -10,13 +10,13 @@ class ThumbnailWidget extends StatefulWidget {
   final bool fullRes;
 
   const ThumbnailWidget({
-    Key? key,
+    super.key,
     required this.board,
     required this.post,
     required this.height,
     this.borderRadius = 0,
     this.fullRes = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ThumbnailWidget> createState() => ThumbnailWidgetState();

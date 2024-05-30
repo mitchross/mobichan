@@ -7,8 +7,8 @@ class ResponsiveWidth extends StatelessWidget {
   const ResponsiveWidth({
     required this.child,
     this.fullWidth = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

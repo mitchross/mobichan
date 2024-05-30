@@ -28,8 +28,8 @@ class ThreadWidget extends StatelessWidget {
     this.threadContent,
     this.onImageTap,
     this.inGrid = false,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final screenshotController = ScreenshotController();
 

@@ -13,8 +13,8 @@ class SettingProvider extends StatelessWidget {
     required this.settingTitle,
     required this.builder,
     this.loadingWidget,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

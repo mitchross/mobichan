@@ -5,7 +5,7 @@ import 'package:mobichan/dependency_injector.dart';
 import 'package:mobichan/features/release/release.dart';
 
 class UpdateWidgetIos extends StatelessWidget {
-  const UpdateWidgetIos({Key? key}) : super(key: key);
+  const UpdateWidgetIos({super.key});
 
   @override
   Widget build(BuildContext context) {

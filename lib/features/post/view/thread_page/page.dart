@@ -33,7 +33,7 @@ class ThreadPage extends StatelessWidget {
 
   final ItemScrollController itemScrollController = ItemScrollController();
 
-  ThreadPage({Key? key}) : super(key: key);
+  ThreadPage({super.key});
 
   @override
   Widget build(BuildContext context) {

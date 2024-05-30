@@ -3,7 +3,7 @@ import 'package:mobichan/features/board/board.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BoardTabs extends StatelessWidget {
-  const BoardTabs({Key? key}) : super(key: key);
+  const BoardTabs({super.key});
 
   @override
   Widget build(BuildContext context) {

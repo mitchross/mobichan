@@ -1,4 +1,5 @@
 /// From https://ktuusj.medium.com/flutter-custom-selection-toolbar-3acbe7937dd3
+library;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobichan/localization.dart';
@@ -73,7 +74,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
 
 class MyTextSelectionToolbar extends StatefulWidget {
   const MyTextSelectionToolbar({
-    Key? key,
+    super.key,
     required this.anchorAbove,
     required this.anchorBelow,
     required this.clipboardStatus,
@@ -84,7 +85,7 @@ class MyTextSelectionToolbar extends StatefulWidget {
 
     /// Custom
     required this.customButton,
-  }) : super(key: key);
+  });
 
   final Offset anchorAbove;
   final Offset anchorBelow;

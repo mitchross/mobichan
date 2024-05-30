@@ -21,8 +21,8 @@ class ReplyWidget extends StatelessWidget {
     this.inDialog = false,
     this.showReplies = false,
     this.replyingTo,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   final screenshotController = ScreenshotController();
 

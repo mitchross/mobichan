@@ -17,8 +17,8 @@ class ContentWidget extends StatelessWidget {
     required this.threadReplies,
     this.inDialog = false,
     this.replyingTo,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String insertYous(String? str) {
     final quoting = reply.replyingTo(threadReplies);

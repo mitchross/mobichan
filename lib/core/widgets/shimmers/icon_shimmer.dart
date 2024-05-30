@@ -4,10 +4,10 @@ class IconShimmer extends StatelessWidget {
   final IconData icon;
   final double size;
   const IconShimmer({
-    Key? key,
+    super.key,
     required this.icon,
     this.size = 20,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -16,7 +16,7 @@ class GalleryPage extends StatelessWidget {
 
   final int crossAxisCount = 3;
 
-  const GalleryPage({Key? key}) : super(key: key);
+  const GalleryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
