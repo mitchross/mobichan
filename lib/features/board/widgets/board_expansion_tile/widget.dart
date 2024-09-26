@@ -37,35 +37,37 @@ class _BoardExpansionTileWidgetState extends State<BoardExpansionTileWidget> {
           this.isExpanded = isExpanded;
         });
       },
-      header: Expanded(
-        child: InkWell(
-          onTap: widget.onTap,
-          child: Padding(
-            padding: const EdgeInsets.all(8.0),
-            child: BlocBuilder<SearchCubit, SearchState>(
-              builder: (context, state) {
-                return Row(
-                  children: [
-                    if (state is Searching && widget.onTap == null)
-                      widget.buildBackButton(context)
-                    else
-                      widget.buildIcon(),
-                    const SizedBox(
-                      width: 18,
-                    ),
-                    Expanded(
-                      child: state is Searching && widget.onTap == null
-                          ? widget.buildSearchField(context)
-                          : widget.buildTitle(context),
-                    ),
-                    if (isExpanded) widget.buildSearchIcon(context),
-                  ],
-                );
-              },
+      header: (bool isExpanded, Animation<double> animation, Animation<double> secondaryAnimation, ConfigurableExpansionTileController controller) {
+        return Expanded(
+          child: InkWell(
+            onTap: widget.onTap,
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: BlocBuilder<SearchCubit, SearchState>(
+                builder: (context, state) {
+                  return Row(
+                    children: [
+                      if (state is Searching && widget.onTap == null)
+                        widget.buildBackButton(context)
+                      else
+                        widget.buildIcon(),
+                      const SizedBox(
+                        width: 18,
+                      ),
+                      Expanded(
+                        child: state is Searching && widget.onTap == null
+                            ? widget.buildSearchField(context)
+                            : widget.buildTitle(context),
+                      ),
+                      if (isExpanded) widget.buildSearchIcon(context),
+                    ],
+                  );
+                },
+              ),
             ),
           ),
-        ),
-      ),
+        );
+      },
       childrenBody: widget.child != null ? Column(children: [widget.child!]) : null, // Change this line
     );
   }

@@ -54,15 +54,12 @@ class ContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return SelectableHtml(
-          selectionControls: PostTextSelectionControls(
-            customButton: (start, end) => handleQuote(context, start, end),
-          ),
+        return Html(
           data: insertYous(
               insertATags(highlightReplyingTo(reply.com, replyingTo))),
-          onAnchorTap: (str, renderContext, attributes, element) {
-            if (attributes['class'] == 'quotelink' ||
-                attributes['class'] == 'quotelink-lowlight') {
+          onAnchorTap: (str, attributes, element) {
+            if (attributes != null && (attributes['class'] == 'quotelink' ||
+                attributes['class'] == 'quotelink-lowlight')) {
               handleTapQuotelink(context, str!);
             } else {
               handleTapUrl(str!);

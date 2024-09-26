@@ -2,6 +2,8 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:mobichan/localization.dart';
+import 'package:flutter/services.dart' show ValueListenable;
+import 'package:flutter/foundation.dart';
 
 typedef OffsetValue = void Function(int start, int end);
 
@@ -23,7 +25,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     Offset selectionMidpoint,
     List<TextSelectionPoint> endpoints,
     TextSelectionDelegate delegate,
-    ClipboardStatusNotifier? clipboardStatus,
+    ValueListenable<ClipboardStatus>? clipboardStatus,
     Offset? lastSecondaryTapDownPosition,
   ) {
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];
@@ -45,9 +47,9 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     return MyTextSelectionToolbar(
       anchorAbove: anchorAbove,
       anchorBelow: anchorBelow,
-      clipboardStatus: clipboardStatus,
+      clipboardStatus: ClipboardStatusNotifier(),
       handleCopy: canCopy(delegate)
-          ? () => handleCopy(delegate, clipboardStatus)
+          ? () => handleCopy(delegate)
           : null,
 
       /// Custom code
@@ -63,7 +65,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
             textEditingValue, SelectionChangedCause.tap);
         delegate.hideToolbar();
       },
-      handleCut: canCut(delegate) ? () => handleCut(delegate, null) : null,
+      handleCut: canCut(delegate) ? () => handleCut(delegate) : null,
       handlePaste: canPaste(delegate) ? () => handlePaste(delegate) : null,
       handleSelectAll:
           canSelectAll(delegate) ? () => handleSelectAll(delegate) : null,
@@ -129,9 +131,7 @@ class MyTextSelectionToolbarState extends State<MyTextSelectionToolbar> {
   void dispose() {
     super.dispose();
     if (widget.clipboardStatus != null) {
-      if (!widget.clipboardStatus!.disposed) {
-        widget.clipboardStatus?.removeListener(_onChangedClipboardStatus);
-      }
+      widget.clipboardStatus?.removeListener(_onChangedClipboardStatus);
     }
   }
 

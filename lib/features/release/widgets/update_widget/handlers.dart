@@ -39,7 +39,7 @@ extension UpdateWidgetHandlers on UpdateWidgetState {
         onReceiveProgress: (received, total) => handleProgress(received, total),
       );
 
-      await InstallPlugin.installApk(filePath, packageInfo.packageName);
+      await InstallPlugin.installApk(filePath);
     }
   }
 }
