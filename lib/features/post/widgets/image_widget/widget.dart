@@ -26,9 +26,9 @@ class ImageWidget extends StatefulWidget {
 }
 
 class ImageWidgetState extends State<ImageWidget> {
-  ConnectivityResult _connectionStatus = ConnectivityResult.none;
+  List<ConnectivityResult> _connectionStatus = [];
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription;
 
   @override
   void initState() {
@@ -43,31 +43,31 @@ class ImageWidgetState extends State<ImageWidget> {
   Widget build(BuildContext context) {
     if (widget.post.filename != null) {
       return BlocBuilder<SettingsCubit, List<Setting>?>(
-          builder: (context, settings) {
-            if (settings != null) {
-              return FutureBuilder<String>(
-                future: _getImageUrl(
-                  widget.post,
-                  widget.board,
-                  settings,
-                  _connectionStatus,
-                ),
-                builder: (context, snapshot) {
-                  if (snapshot.hasData) {
-                    return buildImage(snapshot.data!, settings);
-                  } else {
-                    return buildImage(
-                        widget.post.getThumbnailUrl(widget.board)!,settings);
-                  }
-                },
-              );
-            } else {
-              return const Center(
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        );
+        builder: (context, settings) {
+          if (settings != null) {
+            return FutureBuilder<String>(
+              future: _getImageUrl(
+                widget.post,
+                widget.board,
+                settings,
+                _connectionStatus.isNotEmpty ? _connectionStatus.first : ConnectivityResult.none,
+              ),
+              builder: (context, snapshot) {
+                if (snapshot.hasData) {
+                  return buildImage(snapshot.data!, settings);
+                } else {
+                  return buildImage(
+                      widget.post.getThumbnailUrl(widget.board)!, settings);
+                }
+              },
+            );
+          } else {
+            return const Center(
+              child: CircularProgressIndicator(),
+            );
+          }
+        },
+      );
     } else {
       return Container();
     }
@@ -81,12 +81,12 @@ class ImageWidgetState extends State<ImageWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {
-    late ConnectivityResult result;
+    late List<ConnectivityResult> result;
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
       result = await _connectivity.checkConnectivity();
     } on PlatformException catch (e) {
-      log(e.toString());
+      log('Couldn\'t check connectivity status', error: e);
       return;
     }
 
@@ -94,16 +94,17 @@ class ImageWidgetState extends State<ImageWidget> {
     // message was in flight, we want to discard the reply rather than calling
     // setState to update our non-existent appearance.
     if (!mounted) {
-      return Future.value(null);
+      return;
     }
 
     return _updateConnectionStatus(result);
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
+  void _updateConnectionStatus(List<ConnectivityResult> result) {
     setState(() {
       _connectionStatus = result;
     });
+    log('Connectivity changed: $_connectionStatus');
   }
 
   Future<String> _getImageUrl(

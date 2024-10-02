@@ -18,10 +18,10 @@ dependencies:
   html_unescape: ^2.0.0
   video_player: ^2.9.1
   image_gallery_saver: ^2.0.3
-  permission_handler: ^10.4.5
+  permission_handler: ^11.3.1
   path_provider: ^2.1.4
   flutter_vlc_player: ^7.4.2
-  package_info_plus: ^4.2.0
+  package_info_plus: ^8.0.2
   flutter_displaymode: ^0.6.0
   version: ^3.0.2
   photo_view: ^0.15.0
@@ -31,7 +31,7 @@ dependencies:
   share: ^2.0.4
   easy_localization: ^3.0.7
   html: ^0.15.4
-  connectivity_plus: ^4.0.2
+  connectivity_plus: ^6.0.5
   flutter_bloc: ^8.1.6
   equatable: ^2.0.5
   mobichan_domain:
@@ -39,16 +39,16 @@ dependencies:
   mobichan_data:
     path: packages/mobichan_data
   configurable_expansion_tile_null_safety: ^3.3.2
-  shimmer: ^2.0.0
-  get_it: ^7.7.0
+  shimmer: ^3.0.0
+  get_it: ^8.0.0
   scrollable_positioned_list: ^0.3.8
   flutter_staggered_grid_view: ^0.7.0
   string_similarity: ^2.1.1
-  grouped_list: ^5.1.2
+  grouped_list: ^6.0.0
   flutter_device_type: ^0.4.0
   timeago: ^3.7.0
 
-  device_info_plus: ^9.1.2
+  device_info_plus: ^10.1.2
   path: ^1.9.0
   sqflite: ^2.3.3
   data_connection_checker:
@@ -63,14 +63,14 @@ dependencies:
   flutter_local_notifications: ^17.2.3
   firebase_app_check: ^0.3.1
   firebase_auth: ^5.3.0
-  file_picker: ^5.5.0
+  file_picker: ^8.1.2
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  cider: ^0.1.6
+  cider: ^0.2.8
   build_runner: ^2.4.12
-  flutter_lints: ^2.0.3
+  flutter_lints: ^5.0.0
   flutter_launcher_icons: ^0.14.0
 
 dependency_overrides:
