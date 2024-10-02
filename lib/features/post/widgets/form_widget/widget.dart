@@ -12,8 +12,7 @@ class FormWidget extends StatelessWidget {
   final Sort? sort;
   final Post? thread;
 
-  const FormWidget({required this.board, this.sort, this.thread, Key? key})
-      : super(key: key);
+  const FormWidget({required this.board, this.sort, this.thread, super.key});
 
   @override
   Widget build(BuildContext context) {

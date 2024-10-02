@@ -6,11 +6,11 @@ class BaseShimmer extends StatelessWidget {
   final bool rounded;
 
   const BaseShimmer({
-    Key? key,
+    super.key,
     required this.width,
     required this.height,
     this.rounded = true,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

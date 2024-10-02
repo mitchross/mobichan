@@ -17,8 +17,8 @@ class ContentWidget extends StatelessWidget {
     required this.threadReplies,
     this.inDialog = false,
     this.replyingTo,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   String insertYous(String? str) {
     final quoting = reply.replyingTo(threadReplies);
@@ -58,7 +58,7 @@ class ContentWidget extends StatelessWidget {
           data: insertYous(
               insertATags(highlightReplyingTo(reply.com, replyingTo))),
           onAnchorTap: (str, attributes, element) {
-            if (attributes != null && (attributes['class'] == 'quotelink' ||
+            if ((attributes['class'] == 'quotelink' ||
                 attributes['class'] == 'quotelink-lowlight')) {
               handleTapQuotelink(context, str!);
             } else {

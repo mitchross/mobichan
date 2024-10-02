@@ -2,20 +2,13 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 
 class ReleaseModel extends Release {
   ReleaseModel({
-    required String? apkUrl,
-    required String? ipaUrl,
-    required String tagName,
-    required String name,
-    required String body,
-    required int size,
-  }) : super(
-          apkUrl: apkUrl,
-          ipaUrl: ipaUrl,
-          tagName: tagName,
-          name: name,
-          body: body,
-          size: size,
-        );
+    required super.apkUrl,
+    required super.ipaUrl,
+    required super.tagName,
+    required super.name,
+    required super.body,
+    required super.size,
+  });
 
   factory ReleaseModel.fromJson(Map<String, dynamic> json) {
     return ReleaseModel(

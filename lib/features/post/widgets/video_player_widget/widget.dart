@@ -1,4 +1,5 @@
 /// Open source credits and use from https://github.com/solid-software/flutter_vlc_player/blob/master/flutter_vlc_player/example/lib/vlc_player_with_controls.dart
+library;
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,12 +16,12 @@ class VideoPlayerWidget extends StatefulWidget {
   final bool isMuted;
 
   const VideoPlayerWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.aspectRatio,
     required this.isMuted,
     this.showControls = true,
-  }) : super(key: key);
+  });
 
   @override
   VideoPlayerWidgetState createState() => VideoPlayerWidgetState();

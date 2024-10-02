@@ -1,4 +1,4 @@
-library mobichan_domain;
+library;
 
 export './src/features/board/entities/entities.dart';
 export './src/features/board/repositories/repository.dart';

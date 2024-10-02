@@ -18,8 +18,8 @@ class BoardExpansionTileWidget extends StatefulWidget {
     this.child,
     this.iconSize = 30,
     this.onTap,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   State<BoardExpansionTileWidget> createState() =>

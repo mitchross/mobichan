@@ -1,10 +1,10 @@
 /// Open source credits and use from https://github.com/solid-software/flutter_vlc_player/blob/master/flutter_vlc_player/example/lib/controls_overlay.dart
+library;
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
 
 class VideoPlayerControlsWidget extends StatelessWidget {
-  const VideoPlayerControlsWidget({Key? key, this.controller})
-      : super(key: key);
+  const VideoPlayerControlsWidget({super.key, this.controller});
 
   final VlcPlayerController? controller;
 

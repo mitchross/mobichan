@@ -7,7 +7,7 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 
 class ThreadsPage extends StatefulWidget {
   final Board board;
-  const ThreadsPage(this.board, {Key? key}) : super(key: key);
+  const ThreadsPage(this.board, {super.key});
 
   @override
   State<ThreadsPage> createState() => _ThreadsPageState();

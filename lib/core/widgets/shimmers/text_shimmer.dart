@@ -6,8 +6,8 @@ class TextShimmer extends StatelessWidget {
 
   const TextShimmer({
     this.width,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

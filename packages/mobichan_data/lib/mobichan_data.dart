@@ -1,4 +1,4 @@
-library mobichan_data;
+library;
 
 export './src/features/board/datasources/datasources.dart';
 export './src/features/board/models/models.dart';
