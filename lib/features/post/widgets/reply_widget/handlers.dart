@@ -3,13 +3,13 @@ import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -104,7 +104,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
   void handleSave(BuildContext context) async {
     FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
     final image = await screenshotController.capture();
-    final result = await ImageGallerySaver.saveImage(
+    final result = await ImageGallerySaverPlus.saveImage(
       image!,
       name: "post_${post.no}",
       quality: 60,

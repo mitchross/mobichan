@@ -3,7 +3,7 @@ import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 
 extension ThreadPageHandlers on ThreadPage {
   void handleRefresh({

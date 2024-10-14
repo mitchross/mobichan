@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:mobichan/constants.dart';
@@ -13,7 +13,7 @@ import 'package:mobichan/localization.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CarouselPage extends StatefulWidget {
@@ -91,13 +91,13 @@ class _CarouselPageState extends State<CarouselPage> {
       options: Options(responseType: ResponseType.bytes),
     );
 
-    final result = await ImageGallerySaver.saveImage(
+    final result = await ImageGallerySaverPlus.saveImage(
       Uint8List.fromList(response.data),
       quality: 100,
       name: '${currentPost.filename}${currentPost.ext}',
     );
     ScaffoldMessenger.of(context).showSnackBar(
-      buildSnackBar(result!['isSuccess']),
+      buildSnackBar(result['isSuccess']),
     );
   }
 

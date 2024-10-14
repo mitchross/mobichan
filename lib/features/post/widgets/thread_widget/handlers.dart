@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:image_gallery_saver_plus/image_gallery_saver_plus.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -27,7 +27,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
 
   void handleSave(BuildContext context) async {
     final image = await screenshotController.capture();
-    final result = await ImageGallerySaver.saveImage(
+    final result = await ImageGallerySaverPlus.saveImage(
       image!,
       name: "post_${thread.no}",
       quality: 60,
