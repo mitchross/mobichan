@@ -4,76 +4,72 @@ publish_to: 'none'
 version: 2.0.6+27
 
 environment:
-  sdk: ">=2.14.0 <4.0.0"
+  sdk: ">=3.8.0 <4.0.0"
 
 dependencies:
   flutter:
     sdk: flutter
 
-  cupertino_icons: ^1.0.5
-  shared_preferences: ^2.0.15
-  flutter_html: ^3.0.0-alpha.5
-  dio: ^4.0.6
-  cached_network_image: ^3.2.2
+  cupertino_icons: ^1.0.8
+  shared_preferences: ^2.5.3
+  flutter_html: ^3.0.0
+  dio: ^5.8.0+1
+  cached_network_image: ^3.4.1
   html_unescape: ^2.0.0
-  video_player: ^2.4.7
-  image_gallery_saver: ^1.7.1
-  permission_handler: ^10.0.1
-  path_provider: ^2.0.11
-  flutter_vlc_player: ^7.1.5
-  package_info_plus: ^1.4.3+1
-  flutter_displaymode: ^0.4.0
+  video_player: ^2.9.5
+  image_gallery_saver: ^2.0.3
+  permission_handler: ^12.0.0+1
+  path_provider: ^2.1.5
+  flutter_vlc_player: ^7.4.3
+  package_info_plus: ^8.3.0
+  flutter_displaymode: ^0.6.0
   version: ^3.0.2
-  photo_view: ^0.14.0
-  install_plugin:
+  photo_view: ^0.15.0
+  install_plugin: # Kept as is - Step 4
     git:
       url: https://github.com/mitchross/flutter_install_plugin.git
-  url_launcher: ^6.1.5
-  screenshot: ^1.2.3
-  share: ^2.0.4
-  easy_localization: ^3.0.1
-  html: ^0.15.0
-  connectivity_plus: ^2.3.0
-  flutter_bloc: ^8.1.1
-  equatable: ^2.0.5
-  mobichan_domain:
+  url_launcher: ^6.3.1
+  screenshot: ^3.0.0
+  share_plus: ^11.0.0 # Replaced share
+  easy_localization: ^3.0.7+1
+  html: ^0.15.6
+  connectivity_plus: ^6.1.4 # Updated
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.7
+  mobichan_domain: # Preserved
     path: packages/mobichan_domain
-  mobichan_data:
+  mobichan_data: # Preserved
     path: packages/mobichan_data
-  configurable_expansion_tile_null_safety: ^2.0.0
-  shimmer: ^2.0.0
-  get_it: ^7.2.0
-  scrollable_positioned_list: ^0.3.4
-  flutter_staggered_grid_view: ^0.6.2
-  string_similarity: ^2.0.0
-  grouped_list: ^5.1.2
+  configurable_expansion_tile_null_safety: ^3.3.2
+  shimmer: ^3.0.0
+  get_it: ^8.0.3
+  scrollable_positioned_list: ^0.3.8
+  flutter_staggered_grid_view: ^0.7.0
+  string_similarity: ^2.1.1
+  grouped_list: ^6.0.0
   flutter_device_type: ^0.4.0
-  timeago: ^3.3.0
-  intl: ^0.17.0
-  device_info_plus: ^4.1.2
-  path: ^1.8.2
-  sqflite: ^2.1.0
-  data_connection_checker:
-    git:
-      url: https://github.com/chornthorn/data_connection_checker.git
-      ref: master
-  firebase_core: ^1.21.1
-  firebase_analytics: ^9.3.3
-  firebase_crashlytics: ^2.8.9
-  firebase_messaging: ^11.4.4
-  cloud_firestore: ^3.4.6
-  flutter_local_notifications: ^9.9.0
-  firebase_app_check: ^0.0.7
-  firebase_auth: ^3.7.0
-  file_picker: ^5.0.1
+  timeago: ^3.7.1
+  intl: ^0.20.2
+  device_info_plus: ^11.4.0
+  path: ^1.9.1
+  sqflite: ^2.4.2
+  firebase_core: ^3.13.1
+  firebase_analytics: ^11.1.0
+  firebase_crashlytics: ^4.0.0
+  firebase_messaging: ^15.2.6
+  cloud_firestore: ^5.6.8
+  flutter_local_notifications: ^17.0.0
+  firebase_app_check: ^0.3.0
+  firebase_auth: ^5.0.0
+  file_picker: ^8.0.0
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
-  cider: ^0.1.1
-  build_runner: ^2.1.10
-  flutter_lints: ^2.0.1
-  flutter_launcher_icons: ^0.10.0
+  cider: ^0.2.0
+  build_runner: ^2.4.11
+  flutter_lints: ^4.0.0
+  flutter_launcher_icons: ^0.13.1
 
 flutter_icons:
   android: "ic_launcher"
