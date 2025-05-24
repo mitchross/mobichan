@@ -9,7 +9,8 @@ import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart'; // Replaced share
+import 'package:cross_file/cross_file.dart'; // Added for XFile
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -35,8 +36,8 @@ extension ReplyWidgetHandlers on ReplyWidget {
   }
 
   void handleTapUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, universalLinksOnly: true);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
       throw Exception('Could not launch $url');
     }
@@ -94,8 +95,8 @@ extension ReplyWidgetHandlers on ReplyWidget {
   void handleReport() async {
     final url =
         'https://sys.4channel.org/${board.board}/imgboard.php?mode=report&no=${post.no}';
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, universalLinksOnly: true);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
       throw Exception('Could not launch $url');
     }
@@ -127,7 +128,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
       final directory = await getTemporaryDirectory();
       final imagePath = await File('${directory.path}/image.png').create();
       await imagePath.writeAsBytes(image);
-      await Share.shareFiles([imagePath.path]);
+      await SharePlus.shareXFiles([XFile(imagePath.path)]); // Replaced Share.shareFiles
     }
   }
 }

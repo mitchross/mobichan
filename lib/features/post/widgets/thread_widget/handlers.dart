@@ -4,7 +4,7 @@ import 'package:image_gallery_saver/image_gallery_saver.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart'; // Replaced share
 import 'package:url_launcher/url_launcher.dart';
 import 'package:easy_localization/easy_localization.dart';
 
@@ -18,8 +18,8 @@ extension ThreadWidgetHandlers on ThreadWidget {
   void handleReport() async {
     final url =
         'https://sys.4channel.org/${board.board}/imgboard.php?mode=report&no=${thread.no}';
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, universalLinksOnly: true);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
       throw Exception('Could not launch $url');
     }
@@ -44,7 +44,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
   }
 
   void handleShare() async {
-    Share.share(
+    SharePlus.share( // Replaced Share.share
       'https://boards.4channel.org/${board.board}/thread/${thread.no}',
     );
   }

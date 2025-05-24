@@ -20,8 +20,8 @@ extension ContentWidgetHandlers on ContentWidget {
   }
 
   void handleTapUrl(String url) async {
-    if (await canLaunch(url)) {
-      await launch(url, forceSafariVC: false, universalLinksOnly: true);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url), mode: LaunchMode.externalApplication);
     } else {
       throw Exception('Could not launch $url');
     }

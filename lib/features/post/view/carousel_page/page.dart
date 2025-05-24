@@ -13,7 +13,8 @@ import 'package:mobichan/localization.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart'; // Replaced share
+import 'package:cross_file/cross_file.dart'; // Added for XFile
 import 'package:url_launcher/url_launcher.dart';
 
 class CarouselPage extends StatefulWidget {
@@ -70,7 +71,7 @@ class _CarouselPageState extends State<CarouselPage> {
     return SnackBar(
       backgroundColor: isSuccess
           ? Theme.of(context).cardColor
-          : Theme.of(context).errorColor,
+          : Theme.of(context).colorScheme.error,
       elevation: 5,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.only(
@@ -110,12 +111,12 @@ class _CarouselPageState extends State<CarouselPage> {
     final directory = await getTemporaryDirectory();
     final imagePath = await File('${directory.path}/image.png').create();
     await imagePath.writeAsBytes(response.data);
-    await Share.shareFiles([imagePath.path]);
+    await SharePlus.shareXFiles([XFile(imagePath.path)]);
   }
 
   void _searchImage() async {
     final url = "$reverseImageSearchUrl?image_url=$imageUrl";
-    if (!await launch(url)) throw 'Could not launch $url';
+    if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
   }
 
   @override

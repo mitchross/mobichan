@@ -11,8 +11,8 @@ extension UpdateWidgetIosHandlers on UpdateWidgetIos {
   handleGoToReleasePage(Release release) async {
     if (release.ipaUrl == null) return;
     final url = release.ipaUrl!;
-    if (await canLaunch(url)) {
-      await launch(url);
+    if (await canLaunchUrl(Uri.parse(url))) {
+      await launchUrl(Uri.parse(url)); // Defaults to LaunchMode.platformDefault
     } else {
       throw Exception('Could not launch $url');
     }

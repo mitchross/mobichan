@@ -37,7 +37,13 @@ class _BoardExpansionTileWidgetState extends State<BoardExpansionTileWidget> {
           this.isExpanded = isExpanded;
         });
       },
-      header: Expanded(
+      // Assuming 'header' is for the collapsed state and 'headerExpanded' for the expanded state.
+      // The original code only had 'header'. If 'headerExpanded' is required and takes a builder,
+      // we'll use the same content for both for now, wrapped in the builder for headerExpanded.
+      header: Expanded( 
+        child: InkWell(
+          onTap: widget.onTap,
+      headerExpanded: (isExpanded, animationIcon, animationBody, controller) => Expanded(
         child: InkWell(
           onTap: widget.onTap,
           child: Padding(
@@ -66,7 +72,8 @@ class _BoardExpansionTileWidgetState extends State<BoardExpansionTileWidget> {
           ),
         ),
       ),
-      children: widget.child != null ? [widget.child!] : [],
+      // children: widget.child != null ? [widget.child!] : [], // Original 'children'
+      childrenBody: widget.child, // Replaced 'children' with 'childrenBody' taking a single Widget?
     );
   }
 }

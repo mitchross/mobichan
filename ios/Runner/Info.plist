@@ -24,6 +24,10 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>This app requires access to the camera to capture photos and videos.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>This app requires access to the microphone for recording audio.</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Used to post images to 4chan.</string>
 	<key>UILaunchStoryboardName</key>
@@ -49,10 +53,11 @@
 	<array>
 		<string>https</string>
 		<string>http</string>
+		<string>tel</string>
+		<string>sms</string>
+		<string>mailto</string>
 	</array>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
-	<true/>
-	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 </dict>
 </plist>

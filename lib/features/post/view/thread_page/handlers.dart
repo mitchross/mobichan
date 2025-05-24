@@ -3,7 +3,7 @@ import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:share/share.dart';
+import 'package:share_plus/share_plus.dart'; // Replaced share
 
 extension ThreadPageHandlers on ThreadPage {
   void handleRefresh({
@@ -22,7 +22,7 @@ extension ThreadPageHandlers on ThreadPage {
   }
 
   void handleShare(Board board, Post thread) {
-    Share.share(
+    SharePlus.share( // Replaced Share.share
         'https://boards.4channel.org/${board.board}/thread/${thread.no}');
   }
 

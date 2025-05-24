@@ -26,7 +26,7 @@ class BoardTabs extends StatelessWidget {
               physics: const BouncingScrollPhysics(
                 parent: AlwaysScrollableScrollPhysics(),
               ),
-              labelStyle: Theme.of(context).textTheme.headline2,
+              labelStyle: Theme.of(context).textTheme.displayMedium,
               unselectedLabelColor: Theme.of(context).disabledColor,
               tabs: state.boards
                   .map(

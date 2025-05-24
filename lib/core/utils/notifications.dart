@@ -36,26 +36,18 @@ class NotificationManager {
 
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('@drawable/ic_stat_name');
-    final IOSInitializationSettings initializationSettingsIos =
-        IOSInitializationSettings(
-      onDidReceiveLocalNotification: (id, title, body, payload) {
-        flutterLocalNotificationsPlugin.show(
-          id,
-          title,
-          body,
-          const NotificationDetails(),
-          payload: payload,
-        );
-      },
+    final DarwinInitializationSettings initializationSettingsDarwin =
+        DarwinInitializationSettings(
+      onDidReceiveLocalNotification: onDidReceiveLocalNotification,
     );
     final InitializationSettings initializationSettings =
         InitializationSettings(
       android: initializationSettingsAndroid,
-      iOS: initializationSettingsIos,
+      iOS: initializationSettingsDarwin, // Changed from initializationSettingsIos
     );
     await flutterLocalNotificationsPlugin.initialize(
       initializationSettings,
-      onSelectNotification: _onSelectNotification,
+      onDidReceiveNotificationResponse: onDidReceiveNotificationResponse, // Changed parameter
     );
 
     await flutterLocalNotificationsPlugin
@@ -108,6 +100,34 @@ class NotificationManager {
     if (payload == null) return;
     final data = Map<String, dynamic>.from(jsonDecode(payload));
     _handleNotificationTap(data);
+  }
+
+  // New method to handle NotificationResponse
+  void onDidReceiveNotificationResponse(NotificationResponse notificationResponse) async {
+    final String? payload = notificationResponse.payload;
+    if (payload != null) {
+      print('notification payload: $payload'); // Added as per instruction example
+      // Existing logic from _onSelectNotification
+      final data = Map<String, dynamic>.from(jsonDecode(payload));
+      _handleNotificationTap(data);
+    }
+  }
+
+  // Existing onDidReceiveLocalNotification, ensured signature and async
+  Future<void> onDidReceiveLocalNotification(
+      int id, String? title, String? body, String? payload) async {
+    // This is for iOS versions < 10.
+    // You can show an alert or update your UI.
+    // For simplicity, we're not re-showing the notification here as it might lead to duplicates
+    // if also handled by onDidReceiveNotificationResponse for newer iOS.
+    // However, the original code did show it, so keeping that behavior:
+    FlutterLocalNotificationsPlugin().show(
+      id,
+      title,
+      body,
+      const NotificationDetails(), // Ensure you have appropriate NotificationDetails if needed
+      payload: payload,
+    );
   }
 
   void _handleMessage(RemoteMessage message) {
