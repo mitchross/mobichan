@@ -21,8 +21,8 @@ extension ThreadPageHandlers on ThreadPage {
     context.read<PostFormCubit>().toggleVisible();
   }
 
-  void handleShare(Board board, Post thread) {
-    SharePlus.share( // Replaced Share.share
+  void handleShare(Board board, Post thread) async { // Added async
+    await SharePlus.share( // Added await, Replaced Share.share
         'https://boards.4channel.org/${board.board}/thread/${thread.no}');
   }
 

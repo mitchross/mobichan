@@ -10,7 +10,7 @@ import 'package:mobichan/localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:share_plus/share_plus.dart'; // Replaced share
-import 'package:cross_file/cross_file.dart'; // Added for XFile
+// import 'package:cross_file/cross_file.dart'; // Removed as XFile is exported by share_plus
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:easy_localization/easy_localization.dart';

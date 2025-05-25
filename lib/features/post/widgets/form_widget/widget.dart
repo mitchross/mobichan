@@ -23,8 +23,20 @@ class FormWidget extends StatelessWidget {
         form.commentController.selection = TextSelection.fromPosition(
           TextPosition(offset: form.comment.length),
         );
-        return WillPopScope(
-          onWillPop: () async => handlePop(context, form),
+        return PopScope( // Replaced WillPopScope
+          canPop: false, // Set to false for complex logic
+          onPopInvoked: (bool didPop) async {
+            if (didPop) {
+              return;
+            }
+            // Migrated logic from onWillPop
+            final bool shouldPop = await handlePop(context, form);
+            if (shouldPop) {
+              if (Navigator.of(context).canPop()) {
+                Navigator.of(context).pop();
+              }
+            }
+          },
           child: AnimatedPositioned(
             duration: animationDuration,
             curve: Curves.easeInOut,

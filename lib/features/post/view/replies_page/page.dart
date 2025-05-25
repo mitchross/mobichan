@@ -27,13 +27,22 @@ class RepliesPage extends StatelessWidget {
         child: BlocBuilder<RepliesDialogCubit, List<RepliesDialogState>>(
           builder: (context, repliesHistory) {
             List<Post> lastReplies = repliesHistory.last.replies;
-            return WillPopScope(
-              onWillPop: () async {
+            return PopScope( // Replaced WillPopScope
+              canPop: false, // Set to false for complex logic
+              onPopInvoked: (bool didPop) async {
+                if (didPop) {
+                  return;
+                }
+                // Migrated logic from onWillPop
                 if (repliesHistory.length > 1) {
                   context.read<RepliesDialogCubit>().pop();
-                  return false;
+                  // canPop: false handles the 'return false' case
+                } else {
+                  // Original 'return true' case, so we manually pop
+                  if (Navigator.of(context).canPop()) {
+                     Navigator.of(context).pop();
+                  }
                 }
-                return true;
               },
               child: Column(
                 mainAxisSize: MainAxisSize.min,

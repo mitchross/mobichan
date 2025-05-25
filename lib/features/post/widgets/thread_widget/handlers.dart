@@ -44,7 +44,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
   }
 
   void handleShare() async {
-    SharePlus.share( // Replaced Share.share
+    await SharePlus.share( // Added await, Replaced Share.share
       'https://boards.4channel.org/${board.board}/thread/${thread.no}',
     );
   }

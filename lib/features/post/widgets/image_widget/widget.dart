@@ -29,7 +29,7 @@ class ImageWidget extends StatefulWidget {
 class ImageWidgetState extends State<ImageWidget> {
   ConnectivityResult _connectionStatus = ConnectivityResult.none;
   final Connectivity _connectivity = Connectivity();
-  late StreamSubscription<ConnectivityResult> _connectivitySubscription;
+  late StreamSubscription<List<ConnectivityResult>> _connectivitySubscription; // Changed type
 
   @override
   void initState() {
@@ -82,10 +82,10 @@ class ImageWidgetState extends State<ImageWidget> {
 
   // Platform messages are asynchronous, so we initialize in an async method.
   Future<void> initConnectivity() async {
-    late ConnectivityResult result;
+    late List<ConnectivityResult> resultList; // Changed type from ConnectivityResult to List<ConnectivityResult>
     // Platform messages may fail, so we use a try/catch PlatformException.
     try {
-      result = await _connectivity.checkConnectivity();
+      resultList = await _connectivity.checkConnectivity(); // Assigns List<ConnectivityResult>
     } on PlatformException catch (e) {
       log(e.toString());
       return;
@@ -98,13 +98,31 @@ class ImageWidgetState extends State<ImageWidget> {
       return Future.value(null);
     }
 
-    return _updateConnectionStatus(result);
+    return _updateConnectionStatus(resultList); // Now correctly passes List<ConnectivityResult>
   }
 
-  Future<void> _updateConnectionStatus(ConnectivityResult result) async {
-    setState(() {
-      _connectionStatus = result;
-    });
+  // Updated to handle List<ConnectivityResult>
+  Future<void> _updateConnectionStatus(List<ConnectivityResult> resultList) async {
+    ConnectivityResult newStatus;
+    if (resultList.contains(ConnectivityResult.wifi)) {
+      newStatus = ConnectivityResult.wifi;
+    } else if (resultList.contains(ConnectivityResult.mobile)) {
+      newStatus = ConnectivityResult.mobile;
+    } else if (resultList.contains(ConnectivityResult.ethernet)) {
+      newStatus = ConnectivityResult.ethernet;
+    } else if (resultList.contains(ConnectivityResult.vpn)) {
+      newStatus = ConnectivityResult.vpn;
+    } else if (resultList.contains(ConnectivityResult.none) || resultList.isEmpty) {
+      newStatus = ConnectivityResult.none;
+    } else {
+      newStatus = resultList.first; // Fallback to the first reported status
+    }
+
+    if (_connectionStatus != newStatus) {
+      setState(() {
+        _connectionStatus = newStatus;
+      });
+    }
   }
 
   Future<String> _getImageUrl(

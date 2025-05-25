@@ -14,7 +14,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:share_plus/share_plus.dart'; // Replaced share
-import 'package:cross_file/cross_file.dart'; // Added for XFile
+// import 'package:cross_file/cross_file.dart'; // Removed as XFile is exported by share_plus
 import 'package:url_launcher/url_launcher.dart';
 
 class CarouselPage extends StatefulWidget {

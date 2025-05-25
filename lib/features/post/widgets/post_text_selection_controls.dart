@@ -24,180 +24,97 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     Offset selectionMidpoint,
     List<TextSelectionPoint> endpoints,
     TextSelectionDelegate delegate,
-    ClipboardStatusNotifier? clipboardStatus,
+    ValueListenable<ClipboardStatus>? clipboardStatus, // Updated signature
     Offset? lastSecondaryTapDownPosition,
   ) {
+    // Calculate anchor points (simplified for modern TextSelectionToolbar)
+    final Offset anchor = selectionMidpoint;
+
+    // Prepare the custom button logic
+    final VoidCallback customButtonLogic = () {
+      customButton(delegate.textEditingValue.selection.start,
+          delegate.textEditingValue.selection.end);
+      // Deselect text after action
+      delegate.userUpdateTextEditingValue(
+          delegate.textEditingValue.copyWith(
+            selection: TextSelection.collapsed(
+                offset: delegate.textEditingValue.selection.baseOffset),
+          ),
+          SelectionChangedCause.toolbar);
+      delegate.hideToolbar();
+    };
+
+    // Get adaptive buttons and add custom button
+    List<Widget> adaptiveButtons = TextSelectionToolbar.getAdaptiveButtons(
+      context,
+      delegate,
+    ).toList(); // Convert to list to allow modification
+
+    // Insert custom button, for example, at the beginning
+    // Or, find a specific button (like copy) and insert before/after it
+    // For simplicity, adding it at a fixed position or based on availability
+    int insertPosition = 0; // Default to beginning
+    // Example: insert after "Copy" if "Copy" exists
+    final int copyButtonIndex = adaptiveButtons.indexWhere((button) {
+      if (button is TextSelectionToolbarButton) {
+        // This check is a bit fragile as it depends on the child Text widget's data.
+        // A more robust way would be to check button type if Flutter exposes it,
+        // or by key if TextSelectionToolbar.getAdaptiveButtons assigned them.
+        // For this migration, we'll assume it's identifiable or just add at a fixed position.
+        final child = button.child;
+        if (child is Text) {
+          // Accessing MaterialLocalizations requires a BuildContext that has it.
+          // The buildToolbar method's context can be used.
+          final localizations = MaterialLocalizations.of(context);
+          return child.data == localizations.copyButtonLabel;
+        }
+      }
+      return false;
+    });
+
+    if (copyButtonIndex != -1) {
+      insertPosition = copyButtonIndex + 1;
+    }
+    
+    // Only add custom button if there's a valid selection for quoting
+    if (delegate.textEditingValue.selection.isValid) {
+        adaptiveButtons.insert(
+        insertPosition,
+        TextSelectionToolbarButton(
+          onPressed: customButtonLogic,
+          child: Text(kQuote.tr()),
+        ),
+      );
+    }
+
+
+    // The TextSelectionToolbar now manages its own position based on anchors.
+    // We provide selectionMidpoint as both anchorAbove and anchorBelow for simplicity,
+    // or use more precise anchors if needed (like the original code did).
+    // For modern Flutter, often just providing `selectionMidpoint` is enough as `anchor`.
+    // The original calculation for anchorAbove and anchorBelow can be used if desired.
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];
     final TextSelectionPoint endTextSelectionPoint =
         endpoints.length > 1 ? endpoints[1] : endpoints[0];
-    final Offset anchorAbove = Offset(
+    final Offset finalAnchorAbove = Offset(
         globalEditableRegion.left + selectionMidpoint.dx,
         globalEditableRegion.top +
             startTextSelectionPoint.point.dy -
             textLineHeight -
             _kToolbarContentDistance);
-    final Offset anchorBelow = Offset(
+    final Offset finalAnchorBelow = Offset(
       globalEditableRegion.left + selectionMidpoint.dx,
       globalEditableRegion.top +
           endTextSelectionPoint.point.dy +
           _kToolbarContentDistanceBelow,
     );
 
-    return MyTextSelectionToolbar(
-      anchorAbove: anchorAbove,
-      anchorBelow: anchorBelow,
-      clipboardStatus: clipboardStatus,
-      handleCopy: canCopy(delegate)
-          ? () => handleCopy(delegate, clipboardStatus)
-          : null,
-
-      /// Custom code
-      customButton: () {
-        customButton(delegate.textEditingValue.selection.start,
-            delegate.textEditingValue.selection.end);
-        TextEditingValue textEditingValue = delegate.textEditingValue.copyWith(
-          selection: TextSelection.collapsed(
-            offset: delegate.textEditingValue.selection.baseOffset,
-          ),
-        );
-        delegate.userUpdateTextEditingValue(
-            textEditingValue, SelectionChangedCause.tap);
-        delegate.hideToolbar();
-      },
-      handleCut: canCut(delegate) ? () => handleCut(delegate, null) : null,
-      handlePaste: canPaste(delegate) ? () => handlePaste(delegate) : null,
-      handleSelectAll:
-          canSelectAll(delegate) ? () => handleSelectAll(delegate) : null,
-    );
-  }
-}
-
-class MyTextSelectionToolbar extends StatefulWidget {
-  const MyTextSelectionToolbar({
-    Key? key,
-    required this.anchorAbove,
-    required this.anchorBelow,
-    required this.clipboardStatus,
-    this.handleCopy,
-    this.handleCut,
-    this.handlePaste,
-    this.handleSelectAll,
-
-    /// Custom
-    required this.customButton,
-  }) : super(key: key);
-
-  final Offset anchorAbove;
-  final Offset anchorBelow;
-  final ClipboardStatusNotifier? clipboardStatus;
-  final VoidCallback? handleCopy;
-  final VoidCallback? handleCut;
-  final VoidCallback? handlePaste;
-  final VoidCallback? handleSelectAll;
-
-  /// Custom
-  final VoidCallback customButton;
-
-  @override
-  MyTextSelectionToolbarState createState() => MyTextSelectionToolbarState();
-}
-
-class MyTextSelectionToolbarState extends State<MyTextSelectionToolbar> {
-  void _onChangedClipboardStatus() {
-    setState(() {
-      // Inform the widget that the value of clipboardStatus has changed.
-    });
-  }
-
-  @override
-  void initState() {
-    super.initState();
-    widget.clipboardStatus?.addListener(_onChangedClipboardStatus);
-    widget.clipboardStatus?.update();
-  }
-
-  @override
-  void didUpdateWidget(MyTextSelectionToolbar oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.clipboardStatus != oldWidget.clipboardStatus) {
-      widget.clipboardStatus?.addListener(_onChangedClipboardStatus);
-      oldWidget.clipboardStatus?.removeListener(_onChangedClipboardStatus);
-    }
-    widget.clipboardStatus?.update();
-  }
-
-  @override
-  void dispose() {
-    super.dispose();
-    if (widget.clipboardStatus != null) {
-      if (!widget.clipboardStatus!.disposed) {
-        widget.clipboardStatus?.removeListener(_onChangedClipboardStatus);
-      }
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    assert(debugCheckHasMaterialLocalizations(context));
-    final MaterialLocalizations localizations =
-        MaterialLocalizations.of(context);
-
-    final List<_TextSelectionToolbarItemData> itemDatas =
-        <_TextSelectionToolbarItemData>[
-      if (widget.handleCut != null)
-        _TextSelectionToolbarItemData(
-          label: localizations.cutButtonLabel,
-          onPressed: widget.handleCut!,
-        ),
-      if (widget.handleCopy != null)
-        _TextSelectionToolbarItemData(
-          label: localizations.copyButtonLabel,
-          onPressed: widget.handleCopy!,
-        ),
-      if (widget.handlePaste != null &&
-          widget.clipboardStatus?.value == ClipboardStatus.pasteable)
-        _TextSelectionToolbarItemData(
-          label: localizations.pasteButtonLabel,
-          onPressed: widget.handlePaste!,
-        ),
-      if (widget.handleSelectAll != null)
-        _TextSelectionToolbarItemData(
-          label: localizations.selectAllButtonLabel,
-          onPressed: widget.handleSelectAll!,
-        ),
-
-      /// Custom
-      _TextSelectionToolbarItemData(
-        onPressed: widget.customButton,
-        label: kQuote.tr(),
-      ),
-    ];
-
-    int childIndex = 0;
     return TextSelectionToolbar(
-      anchorAbove: widget.anchorAbove,
-      anchorBelow: widget.anchorBelow,
-      toolbarBuilder: (BuildContext context, Widget child) {
-        return Card(child: child);
-      },
-      children: itemDatas.map((_TextSelectionToolbarItemData itemData) {
-        return TextSelectionToolbarTextButton(
-          padding: TextSelectionToolbarTextButton.getPadding(
-              childIndex++, itemDatas.length),
-          onPressed: itemData.onPressed,
-          child: Text(itemData.label),
-        );
-      }).toList(),
+      anchorAbove: finalAnchorAbove,
+      anchorBelow: finalAnchorBelow,
+      children: adaptiveButtons,
     );
   }
 }
 
-class _TextSelectionToolbarItemData {
-  const _TextSelectionToolbarItemData({
-    required this.label,
-    required this.onPressed,
-  });
-
-  final String label;
-  final VoidCallback onPressed;
-}
+// MyTextSelectionToolbar, MyTextSelectionToolbarState, and _TextSelectionToolbarItemData are no longer needed.
