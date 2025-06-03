@@ -75,7 +75,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     if (copyButtonIndex != -1) {
       insertPosition = copyButtonIndex + 1;
     }
-    
+
     // Only add custom button if there's a valid selection for quoting
     if (delegate.textEditingValue.selection.isValid) {
         adaptiveButtons.insert(
