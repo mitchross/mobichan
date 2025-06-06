@@ -3,7 +3,7 @@ import 'package:mobichan/features/board/board.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class BoardTabs extends StatelessWidget {
-  const BoardTabs({Key? key}) : super(key: key);
+  const BoardTabs({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,7 +13,7 @@ class BoardTabs extends StatelessWidget {
       child: BlocBuilder<TabsCubit, TabsState>(
         builder: (context, state) {
           if (state is TabsLoaded) {
-            DefaultTabController.of(context)?.animateTo(state.currentIndex);
+            DefaultTabController.of(context).animateTo(state.currentIndex);
             return TabBar(
               onTap: (index) async {
                 context.read<NsfwWarningCubit>().dismiss();

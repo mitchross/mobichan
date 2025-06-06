@@ -10,7 +10,7 @@ import 'package:grouped_list/grouped_list.dart';
 class SettingsPage extends StatelessWidget {
   static String routeName = '/settings';
 
-  const SettingsPage({Key? key}) : super(key: key);
+  const SettingsPage({super.key});
 
   @override
   Widget build(BuildContext context) {

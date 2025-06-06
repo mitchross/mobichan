@@ -16,8 +16,8 @@ class RepliesPage extends StatelessWidget {
     required this.postReplies,
     required this.threadReplies,
     this.replyingTo,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

@@ -23,12 +23,12 @@ class CarouselPage extends StatefulWidget {
   final Board board;
   final List<Post> posts;
   const CarouselPage({
-    Key? key,
+    super.key,
     required this.imageIndex,
     required this.board,
     required this.posts,
     this.heroTitle = "img",
-  }) : super(key: key);
+  });
 
   @override
   _CarouselPageState createState() => _CarouselPageState();

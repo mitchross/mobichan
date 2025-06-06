@@ -5,7 +5,7 @@ import 'package:mobichan/features/board/board.dart';
 import 'package:mobichan/features/post/post.dart';
 
 class BoardNsfwCheckPage extends StatelessWidget {
-  const BoardNsfwCheckPage({Key? key}) : super(key: key);
+  const BoardNsfwCheckPage({super.key});
 
   @override
   Widget build(BuildContext context) {

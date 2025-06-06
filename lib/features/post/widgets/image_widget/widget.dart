@@ -16,11 +16,11 @@ class ImageWidget extends StatefulWidget {
   final bool fullRes;
 
   const ImageWidget({
-    Key? key,
+    super.key,
     required this.board,
     required this.post,
     this.fullRes = false,
-  }) : super(key: key);
+  });
 
   @override
   State<ImageWidget> createState() => ImageWidgetState();

@@ -13,8 +13,7 @@ class DateWidget extends StatelessWidget {
       {required this.post,
       this.inDialog = false,
       this.inGrid = false,
-      Key? key})
-      : super(key: key);
+      super.key});
 
   @override
   Widget build(BuildContext context) {

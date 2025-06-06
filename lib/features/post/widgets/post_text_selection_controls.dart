@@ -1,4 +1,5 @@
 /// From https://ktuusj.medium.com/flutter-custom-selection-toolbar-3acbe7937dd3
+library;
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
@@ -31,7 +32,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     final Offset anchor = selectionMidpoint;
 
     // Prepare the custom button logic
-    final VoidCallback customButtonLogic = () {
+    customButtonLogic() {
       customButton(delegate.textEditingValue.selection.start,
           delegate.textEditingValue.selection.end);
       // Deselect text after action
@@ -42,7 +43,7 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
           ),
           SelectionChangedCause.toolbar);
       delegate.hideToolbar();
-    };
+    }
 
     // Get adaptive buttons and add custom button
     List<Widget> adaptiveButtons = TextSelectionToolbar.getAdaptiveButtons(

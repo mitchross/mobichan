@@ -1,4 +1,5 @@
 /// Open source credits and use from https://github.com/solid-software/flutter_vlc_player/blob/master/flutter_vlc_player/example/lib/vlc_player_with_controls.dart
+library;
 import 'dart:typed_data';
 
 import 'package:easy_localization/easy_localization.dart';
@@ -15,12 +16,12 @@ class VideoPlayerWidget extends StatefulWidget {
   final bool isMuted;
 
   const VideoPlayerWidget({
-    Key? key,
+    super.key,
     required this.controller,
     required this.aspectRatio,
     required this.isMuted,
     this.showControls = true,
-  }) : super(key: key);
+  });
 
   @override
   VideoPlayerWidgetState createState() => VideoPlayerWidgetState();
@@ -165,10 +166,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Text(
-                        'Size: ' +
-                            (_controller!.value.size.width.toInt()).toString() +
-                            'x' +
-                            (_controller!.value.size.height.toInt()).toString(),
+                        'Size: ${_controller!.value.size.width.toInt()}x${_controller!.value.size.height.toInt()}',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style:
@@ -176,10 +174,9 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       ),
                       const SizedBox(height: 5),
                       Text(
-                        'Status: ' +
-                            _controller!.value.playingState
+                        'Status: ${_controller!.value.playingState
                                 .toString()
-                                .split('.')[1],
+                                .split('.')[1]}',
                         textAlign: TextAlign.center,
                         overflow: TextOverflow.ellipsis,
                         style:
@@ -368,7 +365,7 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
     var snapshot = await _controller!.takeSnapshot();
     _overlayEntry?.remove();
     _overlayEntry = _createSnapshotThumbnail(snapshot);
-    Overlay.of(context)!.insert(_overlayEntry!);
+    Overlay.of(context).insert(_overlayEntry!);
   }
 
   OverlayEntry _createSnapshotThumbnail(Uint8List snapshot) {

@@ -12,8 +12,7 @@ class FormWidget extends StatelessWidget {
   final Sort? sort;
   final Post? thread;
 
-  const FormWidget({required this.board, this.sort, this.thread, Key? key})
-      : super(key: key);
+  const FormWidget({required this.board, this.sort, this.thread, super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -30,7 +29,7 @@ class FormWidget extends StatelessWidget {
               return;
             }
             // Migrated logic from onWillPop
-            final bool shouldPop = await handlePop(context, form);
+            final bool shouldPop = handlePop(context, form);
             if (shouldPop) {
               if (Navigator.of(context).canPop()) {
                 Navigator.of(context).pop();

@@ -9,8 +9,7 @@ class CaptchaPage extends StatelessWidget {
   final Board board;
   final Post? thread;
 
-  const CaptchaPage({required this.board, this.thread, Key? key})
-      : super(key: key);
+  const CaptchaPage({required this.board, this.thread, super.key});
 
   @override
   Widget build(BuildContext context) {

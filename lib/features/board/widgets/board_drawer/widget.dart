@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'board_drawer.dart';
 
 class BoardDrawer extends StatelessWidget {
-  const BoardDrawer({Key? key}) : super(key: key);
+  const BoardDrawer({super.key});
 
   @override
   Widget build(BuildContext context) {

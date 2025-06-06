@@ -10,12 +10,12 @@ class CaptchaSliderWidget extends StatefulWidget {
   final Function(String attempt) onValidate;
 
   const CaptchaSliderWidget({
-    Key? key,
+    super.key,
     required this.backgroundImage,
     required this.foregroundImage,
     required this.onValidate,
     required this.captchaChallenge,
-  }) : super(key: key);
+  });
 
   @override
   _CaptchaSliderWidgetState createState() => _CaptchaSliderWidgetState();
