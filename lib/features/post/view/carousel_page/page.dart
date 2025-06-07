@@ -111,7 +111,7 @@ class _CarouselPageState extends State<CarouselPage> {
     final directory = await getTemporaryDirectory();
     final imagePath = await File('${directory.path}/image.png').create();
     await imagePath.writeAsBytes(response.data);
-    await SharePlus.shareXFiles([XFile(imagePath.path)]);
+    await Share.shareXFiles([XFile(imagePath.path)]);
   }
 
   void _searchImage() async {

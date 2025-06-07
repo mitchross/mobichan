@@ -42,49 +42,61 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
       delegate.hideToolbar();
     }
 
-    // Get adaptive buttons and add custom button
-    List<Widget> adaptiveButtons = TextSelectionToolbar.getAdaptiveButtons(
+    // Create standard context menu button items
+    final List<ContextMenuButtonItem> buttonItems = <ContextMenuButtonItem>[];
+    final TextSelection selection = delegate.textEditingValue.selection;
+
+    // Add standard buttons based on availability
+    if (canCut(delegate)) {
+      buttonItems.add(ContextMenuButtonItem(
+        onPressed: () => handleCut(delegate),
+        type: ContextMenuButtonType.cut,
+      ));
+    }
+
+    if (canCopy(delegate)) {
+      buttonItems.add(ContextMenuButtonItem(
+        onPressed: () => handleCopy(delegate),
+        type: ContextMenuButtonType.copy,
+      ));
+    }
+
+    if (canPaste(delegate)) {
+      buttonItems.add(ContextMenuButtonItem(
+        onPressed: () => handlePaste(delegate),
+        type: ContextMenuButtonType.paste,
+      ));
+    }
+
+    if (canSelectAll(delegate)) {
+      buttonItems.add(ContextMenuButtonItem(
+        onPressed: () => handleSelectAll(delegate),
+        type: ContextMenuButtonType.selectAll,
+      ));
+    }
+
+    // Get the adaptive buttons for the current platform
+    final List<Widget> adaptiveButtons = AdaptiveTextSelectionToolbar.getAdaptiveButtons(
       context,
-      delegate,
-    ).toList(); // Convert to list to allow modification
+      buttonItems,
+    ).toList();
 
-    // Insert custom button, for example, at the beginning
-    // Or, find a specific button (like copy) and insert before/after it
-    // For simplicity, adding it at a fixed position or based on availability
-    int insertPosition = 0; // Default to beginning
-    // Example: insert after "Copy" if "Copy" exists
-    final int copyButtonIndex = adaptiveButtons.indexWhere((button) {
-      if (button is TextSelectionToolbarButton) {
-        // This check is a bit fragile as it depends on the child Text widget's data.
-        // A more robust way would be to check button type if Flutter exposes it,
-        // or by key if TextSelectionToolbar.getAdaptiveButtons assigned them.
-        // For this migration, we'll assume it's identifiable or just add at a fixed position.
-        final child = button.child;
-        if (child is Text) {
-          // Accessing MaterialLocalizations requires a BuildContext that has it.
-          // The buildToolbar method's context can be used.
-          final localizations = MaterialLocalizations.of(context);
-          return child.data == localizations.copyButtonLabel;
-        }
-      }
-      return false;
-    });
-
-    if (copyButtonIndex != -1) {
-      insertPosition = copyButtonIndex + 1;
-    }
-
-    // Only add custom button if there's a valid selection for quoting
-    if (delegate.textEditingValue.selection.isValid) {
-        adaptiveButtons.insert(
-        insertPosition,
-        TextSelectionToolbarButton(
-          onPressed: customButtonLogic,
-          child: Text(kQuote.tr()),
+    // Add custom Quote button if there's a valid selection
+    if (selection.isValid && !selection.isCollapsed) {
+      // Create custom button using TextSelectionToolbarTextButton for consistency
+      final Widget quoteButton = TextSelectionToolbarTextButton(
+        padding: TextSelectionToolbarTextButton.getPadding(
+          adaptiveButtons.length,
+          adaptiveButtons.length + 1,
         ),
+        onPressed: customButtonLogic,
+        alignment: AlignmentDirectional.centerStart,
+        child: Text(kQuote.tr()),
       );
+      
+      // Insert the custom button at the beginning
+      adaptiveButtons.insert(0, quoteButton);
     }
-
 
     // The original calculation for anchorAbove and anchorBelow can be used if desired.
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];

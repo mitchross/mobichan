@@ -81,7 +81,7 @@ class _BoardExpansionTileWidgetState extends State<BoardExpansionTileWidget> {
       },
       // headerExpanded parameter removed.
       // childrenBody parameter removed.
-      child: widget.child, // Added 'child' parameter
+      childrenBody: widget.child, // Added 'childrenBody' parameter
     );
   }
 }

@@ -22,7 +22,7 @@ extension ThreadPageHandlers on ThreadPage {
   }
 
   void handleShare(Board board, Post thread) async { // Added async
-    await SharePlus.share( // Added await, Replaced Share.share
+    await Share.share( // Added await, Replaced Share.share
         'https://boards.4channel.org/${board.board}/thread/${thread.no}');
   }
 

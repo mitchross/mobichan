@@ -54,35 +54,38 @@ class ContentWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Builder(
       builder: (context) {
-        return SelectableHtml(
+        return SelectionArea(
           selectionControls: PostTextSelectionControls(
             customButton: (start, end) => handleQuote(context, start, end),
           ),
-          data: insertYous(
-              insertATags(highlightReplyingTo(reply.com, replyingTo))),
-          onAnchorTap: (str, renderContext, attributes, element) {
-            if (attributes['class'] == 'quotelink' ||
-                attributes['class'] == 'quotelink-lowlight') {
-              handleTapQuotelink(context, str!);
-            } else {
-              handleTapUrl(str!);
-            }
-          },
-          style: {
-            "body": Style(margin: Margins.zero), // Replaced EdgeInsets.all(0)
-            "a": Style(
-              color: Colors.lightBlueAccent,
-            ),
-            ".quote": Style(
-              color: Colors.green.shade300,
-            ),
-            ".quotelink": Style(
-              color: Theme.of(context).colorScheme.secondary,
-            ),
-            ".quotelink-lowlight": Style(
-              color: Theme.of(context).colorScheme.secondaryContainer,
-            ),
-          },
+          child: Html(
+            data: insertYous(
+                insertATags(highlightReplyingTo(reply.com, replyingTo))),
+            onLinkTap: (str, attributes, element) {
+              if (element != null && element.attributes['class'] != null &&
+                  (element.attributes['class'] == 'quotelink' ||
+                   element.attributes['class'] == 'quotelink-lowlight')) {
+                handleTapQuotelink(context, str!);
+              } else {
+                handleTapUrl(str!);
+              }
+            },
+            style: {
+              "body": Style(margin: Margins.zero), // Replaced EdgeInsets.all(0)
+              "a": Style(
+                color: Colors.lightBlueAccent,
+              ),
+              ".quote": Style(
+                color: Colors.green.shade300,
+              ),
+              ".quotelink": Style(
+                color: Theme.of(context).colorScheme.secondary,
+              ),
+              ".quotelink-lowlight": Style(
+                color: Theme.of(context).colorScheme.secondaryContainer,
+              ),
+            },
+          ),
         );
       },
     );

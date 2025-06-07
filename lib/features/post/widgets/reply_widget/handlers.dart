@@ -128,7 +128,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
       final directory = await getTemporaryDirectory();
       final imagePath = await File('${directory.path}/image.png').create();
       await imagePath.writeAsBytes(image);
-      await SharePlus.shareXFiles([XFile(imagePath.path)]); // Replaced Share.shareFiles
+      await Share.shareXFiles([XFile(imagePath.path)]); // Replaced Share.shareFiles
     }
   }
 }
