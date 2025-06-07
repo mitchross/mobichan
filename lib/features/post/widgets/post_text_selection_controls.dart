@@ -1,8 +1,8 @@
 /// From https://ktuusj.medium.com/flutter-custom-selection-toolbar-3acbe7937dd3
 library;
 import 'package:easy_localization/easy_localization.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
 import 'package:mobichan/localization.dart';
 
 typedef OffsetValue = void Function(int start, int end);
@@ -28,9 +28,6 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     ValueListenable<ClipboardStatus>? clipboardStatus, // Updated signature
     Offset? lastSecondaryTapDownPosition,
   ) {
-    // Calculate anchor points (simplified for modern TextSelectionToolbar)
-    final Offset anchor = selectionMidpoint;
-
     // Prepare the custom button logic
     customButtonLogic() {
       customButton(delegate.textEditingValue.selection.start,
@@ -89,10 +86,6 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     }
 
 
-    // The TextSelectionToolbar now manages its own position based on anchors.
-    // We provide selectionMidpoint as both anchorAbove and anchorBelow for simplicity,
-    // or use more precise anchors if needed (like the original code did).
-    // For modern Flutter, often just providing `selectionMidpoint` is enough as `anchor`.
     // The original calculation for anchorAbove and anchorBelow can be used if desired.
     final TextSelectionPoint startTextSelectionPoint = endpoints[0];
     final TextSelectionPoint endTextSelectionPoint =
