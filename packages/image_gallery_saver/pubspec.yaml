@@ -1,0 +1,25 @@
+name: image_gallery_saver
+description: Local vendored copy with namespace fix for AGP 8.x
+version: 2.0.3+namespace
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+  flutter: ">=3.10.0"
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        package: io.flutter.plugins.imagegallerysaver
+        pluginClass: ImageGallerySaverPlugin
+      ios:
+        pluginClass: ImageGallerySaverPlugin
+        package: io.flutter.plugins.imagegallerysaver
+
+dependencies:
+  flutter:
+    sdk: flutter
+  path_provider: ^2.1.5
+  mime: ^1.0.5
+
+dev_dependencies:
+  flutter_lints: ^3.0.0

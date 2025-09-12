@@ -4,11 +4,11 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 extension UpdateWidgetIosHandlers on UpdateWidgetIos {
-  handleLaterPressed(BuildContext context) {
+  void handleLaterPressed(BuildContext context) {
     Navigator.of(context).pop();
   }
 
-  handleGoToReleasePage(Release release) async {
+  Future<void> handleGoToReleasePage(Release release) async {
     if (release.ipaUrl == null) return;
     final url = release.ipaUrl!;
     if (await canLaunchUrl(Uri.parse(url))) {

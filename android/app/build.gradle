@@ -1,14 +1,17 @@
+plugins {
+    id 'com.android.application'
+    id 'org.jetbrains.kotlin.android'
+    id 'dev.flutter.flutter-gradle-plugin'
+    id 'com.google.gms.google-services'
+    id 'com.google.firebase.crashlytics'
+}
+
 def localProperties = new Properties()
 def localPropertiesFile = rootProject.file('local.properties')
 if (localPropertiesFile.exists()) {
     localPropertiesFile.withReader('UTF-8') { reader ->
         localProperties.load(reader)
     }
-}
-
-def flutterRoot = localProperties.getProperty('flutter.sdk')
-if (flutterRoot == null) {
-    throw new GradleException("Flutter SDK not found. Define location with flutter.sdk in the local.properties file.")
 }
 
 def flutterVersionCode = localProperties.getProperty('flutter.versionCode')
@@ -21,10 +24,6 @@ if (flutterVersionName == null) {
     flutterVersionName = '1.0'
 }
 
-apply plugin: 'com.android.application'
-apply plugin: 'kotlin-android'
-apply from: "$flutterRoot/packages/flutter_tools/gradle/flutter.gradle"
-
 def keystoreProperties = new Properties()
 def keystorePropertiesFile = rootProject.file('key.properties')
 if (keystorePropertiesFile.exists()) {
@@ -32,12 +31,14 @@ if (keystorePropertiesFile.exists()) {
 }
 
 android {
-    compileSdkVersion 33
+    namespace "com.lucasgoudin.mobichan"
+    compileSdk 35
 
     splits {
         abi {
             reset()
-            include 'armeabi-v7a'
+            include 'armeabi-v7a', 'arm64-v8a'
+            universalApk false
         }
     }
 
@@ -47,8 +48,8 @@ android {
 
     defaultConfig {
         applicationId "com.lucasgoudin.mobichan"
-        minSdkVersion 21
-        targetSdk 33
+        minSdkVersion flutter.minSdkVersion // verify Flutter min (likely 21) still OK with dependencies
+        targetSdkVersion 35
         versionCode flutterVersionCode.toInteger()
         versionName flutterVersionName
     }
@@ -65,16 +66,28 @@ android {
     buildTypes {
         release {
             signingConfig signingConfigs.release
+            // R8 enabled by default; shrink & minify resources/code
+            minifyEnabled true
+            shrinkResources true
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
-
-            debuggable false
-            jniDebuggable false
-            renderscriptDebuggable false
-            pseudoLocalesEnabled false
-            zipAlignEnabled true
+            // Explicit debuggable flags not needed; keep minimal config
+        }
+        debug {
+            // Make sure Crashlytics disabled for debug
+            firebaseCrashlytics {
+                mappingFileUploadEnabled false
+            }
         }
     }
-    buildToolsVersion '31.0.0'
+
+    packagingOptions {
+        resources {
+            excludes += [
+                    'META-INF/{AL2.0,LGPL2.1}',
+                    'META-INF/LICENSE*'
+            ]
+        }
+    }
 }
 
 flutter {
@@ -82,11 +95,7 @@ flutter {
 }
 
 dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'androidx.core:core-ktx:1.9.0'
-    implementation platform('com.google.firebase:firebase-bom:29.1.0')
+    implementation 'androidx.core:core-ktx:1.13.1'
+    implementation platform('com.google.firebase:firebase-bom:33.5.1') // Aug 2025 approximate recent BOM
     implementation 'com.google.firebase:firebase-analytics'
 }
-
-apply plugin: 'com.google.gms.google-services'
-apply plugin: 'com.google.firebase.crashlytics'

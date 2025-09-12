@@ -2,16 +2,11 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 
 class SettingModel extends Setting {
   const SettingModel({
-    required String title,
-    required dynamic value,
-    required SettingType type,
-    required SettingGroup group,
-  }) : super(
-          title: title,
-          value: value,
-          type: type,
-          group: group,
-        );
+    required super.title,
+    required super.value,
+    required super.type,
+    required super.group,
+  });
 
   factory SettingModel.fromEntity(Setting settings) {
     return SettingModel(
@@ -58,7 +53,7 @@ class SettingModel extends Setting {
     return SettingGroup.general;
   }
 
-  static get defaultSettings {
+  static List<SettingModel> get defaultSettings {
     return [
       const SettingModel(
         title: 'show_nsfw_warning',
