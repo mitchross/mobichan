@@ -57,6 +57,8 @@
 		<string>sms</string>
 		<string>mailto</string>
 	</array>
+	<key>FLTEnableImpeller</key>
+	<true/>
 	<key>CADisableMinimumFrameDurationOnPhone</key>
 	<true/>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
