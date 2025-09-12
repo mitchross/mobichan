@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:html/parser.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:saver_gallery/saver_gallery.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
@@ -49,10 +49,11 @@ extension ReplyWidgetHandlers on ReplyWidget {
       showDialog(
         context: context,
         builder: (context) => RepliesPage(
-            board: board,
-            replyingTo: post,
-            postReplies: postReplies,
-            threadReplies: threadReplies),
+          board: board,
+          replyingTo: post,
+          postReplies: postReplies,
+          threadReplies: threadReplies,
+        ),
       );
     } else {
       context.read<RepliesDialogCubit>().setReplies(postReplies, post);
@@ -67,9 +68,10 @@ extension ReplyWidgetHandlers on ReplyWidget {
       showDialog(
         context: context,
         builder: (context) => RepliesPage(
-            board: board,
-            postReplies: [quotedPost],
-            threadReplies: threadReplies),
+          board: board,
+          postReplies: [quotedPost],
+          threadReplies: threadReplies,
+        ),
       );
     } else {
       context.read<RepliesDialogCubit>().setReplies([quotedPost], null);
@@ -77,12 +79,13 @@ extension ReplyWidgetHandlers on ReplyWidget {
   }
 
   void handleQuote(BuildContext context, int start, int end) {
-    final html = insertATags(post.com!
-        .replaceAll(RegExp(r'\>\s+\<'), '><')
-        .replaceAll('<br>', '\n'));
+    final html = insertATags(
+      post.com!.replaceAll(RegExp(r'\>\s+\<'), '><').replaceAll('<br>', '\n'),
+    );
     final document = parse(html);
-    final String parsedString =
-        parse(document.body!.text).documentElement!.text.unescapeHtml;
+    final String parsedString = parse(
+      document.body!.text,
+    ).documentElement!.text.unescapeHtml;
 
     final String quote = parsedString.substring(start, end);
     context.read<PostFormCubit>().quote(quote, post);
@@ -105,19 +108,20 @@ extension ReplyWidgetHandlers on ReplyWidget {
   void handleSave(BuildContext context) async {
     FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
     final image = await screenshotController.capture();
-    final result = await ImageGallerySaver.saveImage(
+    final result = await SaverGallery.saveImage(
       image!,
-      name: "post_${post.no}",
       quality: 60,
+      fileName: "post_${post.no}",
+      skipIfExists: false,
     );
-    if (result['isSuccess'] == true) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        successSnackbar(context, kSavePostSuccess.tr()),
-      );
+    if (result.isSuccess) {
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
     } else {
-      ScaffoldMessenger.of(context).showSnackBar(
-        errorSnackbar(context, kSavePostError.tr()),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));
     }
   }
 
@@ -128,7 +132,9 @@ extension ReplyWidgetHandlers on ReplyWidget {
       final directory = await getTemporaryDirectory();
       final imagePath = await File('${directory.path}/image.png').create();
       await imagePath.writeAsBytes(image);
-      await Share.shareXFiles([XFile(imagePath.path)]); // Replaced Share.shareFiles
+      await Share.shareXFiles([
+        XFile(imagePath.path),
+      ]); // Replaced Share.shareFiles
     }
   }
 }

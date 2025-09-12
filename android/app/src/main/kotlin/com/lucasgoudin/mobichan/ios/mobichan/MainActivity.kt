@@ -1,4 +1,4 @@
-package com.lucasgoudin.mobichan
+package com.lucasgoudin.mobichan.ios.mobichan
 
 import io.flutter.embedding.android.FlutterActivity
 

@@ -5,7 +5,7 @@ import 'package:dio/dio.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:image_gallery_saver/image_gallery_saver.dart';
+import 'package:saver_gallery/saver_gallery.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:mobichan/constants.dart';
@@ -92,14 +92,13 @@ class _CarouselPageState extends State<CarouselPage> {
       options: Options(responseType: ResponseType.bytes),
     );
 
-    final result = await ImageGallerySaver.saveImage(
+    final result = await SaverGallery.saveImage(
       Uint8List.fromList(response.data),
       quality: 100,
-      name: '${currentPost.filename}${currentPost.ext}',
+      fileName: '${currentPost.filename}${currentPost.ext}',
+      skipIfExists: false,
     );
-    ScaffoldMessenger.of(context).showSnackBar(
-      buildSnackBar(result!['isSuccess']),
-    );
+    ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(result.isSuccess));
   }
 
   void _shareImage() async {
@@ -124,9 +123,7 @@ class _CarouselPageState extends State<CarouselPage> {
     return Scaffold(
       backgroundColor: transparentColor,
       appBar: AppBar(
-        title: Text(
-          '${currentPost.filename}${currentPost.ext}',
-        ),
+        title: Text('${currentPost.filename}${currentPost.ext}'),
         actions: [
           if (!currentPost.isWebm)
             IconButton(
@@ -146,8 +143,9 @@ class _CarouselPageState extends State<CarouselPage> {
       body: Stack(
         children: [
           PhotoViewGallery.builder(
-            backgroundDecoration:
-                const BoxDecoration(color: Colors.transparent),
+            backgroundDecoration: const BoxDecoration(
+              color: Colors.transparent,
+            ),
             scrollPhysics: const BouncingScrollPhysics(),
             pageController: pageController,
             builder: (BuildContext context, int index) {
@@ -172,9 +170,7 @@ class _CarouselPageState extends State<CarouselPage> {
                   imageProvider: NetworkImage(
                     widget.posts[index].getImageUrl(widget.board)!,
                   ),
-                  heroAttributes: PhotoViewHeroAttributes(
-                    tag: "image$index",
-                  ),
+                  heroAttributes: PhotoViewHeroAttributes(tag: "image$index"),
                 );
               }
             },
@@ -187,7 +183,8 @@ class _CarouselPageState extends State<CarouselPage> {
                 child: (progress == null || progress.expectedTotalBytes == null)
                     ? const CircularProgressIndicator()
                     : CircularProgressIndicator(
-                        value: progress.cumulativeBytesLoaded /
+                        value:
+                            progress.cumulativeBytesLoaded /
                             progress.expectedTotalBytes!,
                       ),
               ),

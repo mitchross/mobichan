@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:install_plugin/install_plugin.dart';
+import 'package:app_installer/app_installer.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:path_provider/path_provider.dart';
@@ -39,7 +39,7 @@ extension UpdateWidgetHandlers on UpdateWidgetState {
         onReceiveProgress: (received, total) => handleProgress(received, total),
       );
 
-      await InstallPlugin.installApk(filePath, packageInfo.packageName);
+      await AppInstaller.installApk(filePath);
     }
   }
 }

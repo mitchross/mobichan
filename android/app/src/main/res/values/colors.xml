@@ -1,4 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="splashBackground">#202020</color>
-    <color name="notificationColor">#00DAC6</color>
+    <!-- Color used for notification accent (Firebase Messaging default) -->
+    <color name="notificationColor">#FF4081</color>
 </resources>
