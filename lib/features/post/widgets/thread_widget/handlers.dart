@@ -45,7 +45,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
     } on GalException catch (e) {
-      log(e.message);
+      log(e.type.message);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

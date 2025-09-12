@@ -125,7 +125,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
     } on GalException catch (e) {
-      log(e.message);
+      log(e.type.message);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

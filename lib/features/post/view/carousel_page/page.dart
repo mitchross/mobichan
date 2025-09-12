@@ -107,7 +107,7 @@ class _CarouselPageState extends State<CarouselPage> {
       );
       ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(true));
     } on GalException catch (e) {
-      log(e.message);
+      log(e.type.message);
       ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
     }
   }
