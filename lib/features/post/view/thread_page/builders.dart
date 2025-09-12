@@ -1,6 +1,5 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
@@ -22,7 +21,7 @@ extension ThreadPageBuilders on ThreadPage {
           board: args.board,
           thread: args.thread,
         ),
-        body: buildLoading(),
+        body: buildLoading(context: context),
       );
     }
     return Scaffold(
@@ -44,7 +43,7 @@ extension ThreadPageBuilders on ThreadPage {
         ),
         child: SettingProvider(
           settingTitle: 'threaded_replies',
-          loadingWidget: buildLoading(),
+          loadingWidget: buildLoading(context: context),
           builder: (threadedReplies) {
             return Stack(
               children: [
@@ -147,9 +146,9 @@ extension ThreadPageBuilders on ThreadPage {
     );
   }
 
-  Widget buildLoading() {
+  Widget buildLoading({required BuildContext context}) {
     return ResponsiveWidth(
-      fullWidth: Device.get().isTablet,
+      fullWidth: MediaQuery.of(context).size.width > 600,
       child: Shimmer.fromColors(
         baseColor: Colors.grey.shade700,
         highlightColor: Colors.grey.shade600,
@@ -306,7 +305,7 @@ extension ThreadPageBuilders on ThreadPage {
         itemBuilder: (context, index) {
           if (index == 0) {
             return ResponsiveWidth(
-              fullWidth: Device.get().isTablet,
+              fullWidth: MediaQuery.of(context).size.width > 600,
               child: Hero(
                 tag: thread.no,
                 child: ThreadWidget(
@@ -329,7 +328,7 @@ extension ThreadPageBuilders on ThreadPage {
           }
           Post reply = replies[index];
           return ResponsiveWidth(
-            fullWidth: Device.get().isTablet,
+            fullWidth: MediaQuery.of(context).size.width > 600,
             child: ReplyWidget(
               board: board,
               post: reply,
@@ -368,7 +367,7 @@ extension ThreadPageBuilders on ThreadPage {
               itemBuilder: (context, index) {
                 if (index == 0) {
                   return ResponsiveWidth(
-                    fullWidth: Device.get().isTablet,
+                    fullWidth: MediaQuery.of(context).size.width > 600,
                     child: Hero(
                       tag: thread.no,
                       child: ThreadWidget(
@@ -391,7 +390,7 @@ extension ThreadPageBuilders on ThreadPage {
                 }
                 PostWithDepth postWithDepth = snapshot.data![index - 1];
                 return ResponsiveWidth(
-                  fullWidth: Device.get().isTablet,
+                  fullWidth: MediaQuery.of(context).size.width > 600,
                   child: ReplyWidget(
                     board: board,
                     post: postWithDepth.post,
@@ -404,7 +403,7 @@ extension ThreadPageBuilders on ThreadPage {
             ),
           );
         } else {
-          return buildLoading();
+          return buildLoading(context: context);
         }
       },
     );

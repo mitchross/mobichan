@@ -5,7 +5,6 @@ import 'package:mobichan/core/widgets/responsive_width.dart';
 import 'package:mobichan/features/setting/setting.dart';
 import 'package:mobichan/localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
-import 'package:grouped_list/grouped_list.dart';
 
 class SettingsPage extends StatelessWidget {
   static String routeName = '/settings';
@@ -21,13 +20,30 @@ class SettingsPage extends StatelessWidget {
       body: BlocBuilder<SettingsCubit, List<Setting>?>(
         builder: (context, settings) {
           if (settings != null) {
-            return GroupedListView<Setting, SettingGroup>(
-              elements: settings,
-              groupBy: (setting) => setting.group,
-              groupComparator: (a, b) => a.compareTo(b),
-              groupSeparatorBuilder: (group) => buildGroupSeparator(group),
-              itemBuilder: (context, setting) {
-                return ResponsiveWidth(child: buildListTile(setting));
+            final Map<SettingGroup, List<Setting>> groupedSettings = {};
+            for (var setting in settings) {
+              (groupedSettings[setting.group] ??= []).add(setting);
+            }
+
+            final sortedGroups = groupedSettings.keys.toList()
+              ..sort((a, b) => a.compareTo(b));
+
+            final List<dynamic> displayList = [];
+            for (var group in sortedGroups) {
+              displayList.add(group);
+              displayList.addAll(groupedSettings[group]!);
+            }
+
+            return ListView.builder(
+              itemCount: displayList.length,
+              itemBuilder: (context, index) {
+                final item = displayList[index];
+                if (item is SettingGroup) {
+                  return buildGroupSeparator(item);
+                } else if (item is Setting) {
+                  return ResponsiveWidth(child: buildListTile(item));
+                }
+                return Container();
               },
             );
           } else {

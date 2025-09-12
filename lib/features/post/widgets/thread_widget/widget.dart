@@ -43,7 +43,7 @@ class ThreadWidget extends StatelessWidget {
             Wrap(
               children: [
                 buildTitle(context),
-                buildImage(),
+                buildImage(context),
                 if (thread.com != null)
                   inThread
                       ? Padding(

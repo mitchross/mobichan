@@ -1,7 +1,6 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:mobichan/features/board/board.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
@@ -135,7 +134,7 @@ extension ThreadsPageBuilders on ThreadsPage {
           mainAxisSpacing: 1,
           crossAxisSpacing: 1,
           gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: Device.get().isTablet ? 3 : 2,
+            crossAxisCount: MediaQuery.of(context).size.width > 600 ? 3 : 2,
           ),
           itemBuilder: (context, index) {
             return getItemBuilder(context, true, index, threads, sort);

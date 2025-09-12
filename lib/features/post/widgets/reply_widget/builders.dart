@@ -1,4 +1,3 @@
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:mobichan/localization.dart';
 
 import 'package:flutter/material.dart';
@@ -27,7 +26,7 @@ extension ReplyWidgetBuilders on ReplyWidget {
               child: ThumbnailWidget(
                 board: board,
                 post: post,
-                height: Device.get().isTablet ? 380 : 180,
+                height: MediaQuery.of(context).size.width > 600 ? 380 : 180,
                 borderRadius: 5,
               ),
             ),

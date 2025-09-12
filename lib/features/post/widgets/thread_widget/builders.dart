@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_device_type/flutter_device_type.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/core/extensions/string_extension.dart';
@@ -149,15 +148,15 @@ extension ThreadWidgetBuilders on ThreadWidget {
     }
   }
 
-  Widget buildImage() {
+  Widget buildImage(BuildContext context) {
     return InkWell(
       onTap: onImageTap,
       child: ThumbnailWidget(
         board: board,
         post: thread,
         height: inGrid
-            ? (Device.get().isTablet ? 200 : 130)
-            : (Device.get().isTablet ? 380 : 250),
+            ? (MediaQuery.of(context).size.width > 600 ? 200 : 130)
+            : (MediaQuery.of(context).size.width > 600 ? 380 : 250),
         fullRes: true,
       ),
     );
