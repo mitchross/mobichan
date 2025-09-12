@@ -1,9 +1,11 @@
 import 'dart:io';
 
+import 'dart:developer';
+
 import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
+import 'package:gal/gal.dart';
 import 'package:html/parser.dart';
-import 'package:saver_gallery/saver_gallery.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
@@ -106,19 +108,24 @@ extension ReplyWidgetHandlers on ReplyWidget {
   }
 
   void handleSave(BuildContext context) async {
-    FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
-    final image = await screenshotController.capture();
-    final result = await SaverGallery.saveImage(
-      image!,
-      quality: 60,
-      fileName: "post_${post.no}",
-      skipIfExists: false,
-    );
-    if (result.isSuccess) {
+    try {
+      final hasAccess = await Gal.requestAccess();
+      if (!hasAccess) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackbar(context, kSavePostError.tr()));
+        return;
+      }
+      FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
+      final image = await screenshotController.capture();
+      await Gal.putImageBytes(
+        image!,
+        name: "post_${post.no}",
+      );
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
-    } else {
+    } on GalException catch (e) {
+      log(e.message);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

@@ -1,6 +1,8 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:saver_gallery/saver_gallery.dart';
+import 'package:gal/gal.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/localization.dart';
@@ -26,19 +28,24 @@ extension ThreadWidgetHandlers on ThreadWidget {
   }
 
   void handleSave(BuildContext context) async {
-    final image = await screenshotController.capture();
-    final result = await SaverGallery.saveImage(
-      image!,
-      quality: 60,
-      fileName: "post_${thread.no}",
-      androidRelativePath: "Pictures/Mobichan",
-      skipIfExists: false,
-    );
-    if (result.isSuccess) {
+    try {
+      final hasAccess = await Gal.requestAccess();
+      if (!hasAccess) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(errorSnackbar(context, kSavePostError.tr()));
+        return;
+      }
+      final image = await screenshotController.capture();
+      await Gal.putImageBytes(
+        image!,
+        name: "post_${thread.no}",
+        album: "Mobichan",
+      );
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
-    } else {
+    } on GalException catch (e) {
+      log(e.message);
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

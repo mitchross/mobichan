@@ -2,10 +2,12 @@ import 'dart:io';
 import 'dart:typed_data';
 
 import 'package:dio/dio.dart';
+import 'dart:developer';
+
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_vlc_player/flutter_vlc_player.dart';
-import 'package:saver_gallery/saver_gallery.dart';
+import 'package:gal/gal.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:mobichan/constants.dart';
@@ -87,18 +89,27 @@ class _CarouselPageState extends State<CarouselPage> {
   }
 
   void _saveImage() async {
-    var response = await Dio().get(
-      imageUrl,
-      options: Options(responseType: ResponseType.bytes),
-    );
+    try {
+      final hasAccess = await Gal.requestAccess();
+      if (!hasAccess) {
+        ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
+        return;
+      }
 
-    final result = await SaverGallery.saveImage(
-      Uint8List.fromList(response.data),
-      quality: 100,
-      fileName: '${currentPost.filename}${currentPost.ext}',
-      skipIfExists: false,
-    );
-    ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(result.isSuccess));
+      var response = await Dio().get(
+        imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
+
+      await Gal.putImageBytes(
+        Uint8List.fromList(response.data),
+        name: '${currentPost.filename}${currentPost.ext}',
+      );
+      ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(true));
+    } on GalException catch (e) {
+      log(e.message);
+      ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
+    }
   }
 
   void _shareImage() async {
