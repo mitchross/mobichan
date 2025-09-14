@@ -123,13 +123,13 @@ class Post extends Equatable {
 
   String? getThumbnailUrl(Board board) {
     if (tim != null) {
-      return 'https://i.4cdn.org/${board.board}/${tim}s.jpg';
+      return 'https://i.4cdn.org/${board.board}/${tim}s${ext}';
     }
     return null;
   }
 
-  bool get isWebm {
-    return ext == '.webm';
+  bool get isVideo {
+    return ext == '.webm' || ext == '.mp4';
   }
 
   String get displayTitle {
