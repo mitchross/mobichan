@@ -61,10 +61,6 @@ class _CarouselPageState extends State<CarouselPage> {
     return currentPost.getImageUrl(widget.board)!;
   }
 
-  bool isWebM(String url) {
-    return url.contains(".webm");
-  }
-
   Post get currentPost {
     return widget.posts[currentIndex];
   }
@@ -136,7 +132,7 @@ class _CarouselPageState extends State<CarouselPage> {
       appBar: AppBar(
         title: Text('${currentPost.filename}${currentPost.ext}'),
         actions: [
-          if (!currentPost.isWebm)
+          if (!currentPost.isVideo)
             IconButton(
               onPressed: _searchImage,
               icon: const Icon(Icons.image_search_rounded),
@@ -161,7 +157,7 @@ class _CarouselPageState extends State<CarouselPage> {
             pageController: pageController,
             builder: (BuildContext context, int index) {
               Post currentPost = widget.posts[index];
-              if (currentPost.isWebm) {
+              if (currentPost.isVideo) {
                 if (videoPlayerControllers[index] == null) {
                   videoPlayerControllers[index] = VlcPlayerController.network(
                     currentPost.getImageUrl(widget.board)!,
