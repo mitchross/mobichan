@@ -5,6 +5,8 @@ import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/features/sort/sort.dart';
 import 'package:mobichan/features/board/board.dart';
+import 'builders.dart';
+import 'handlers.dart';
 
 class BoardPage extends StatefulWidget {
   final bool showWarning;
@@ -51,14 +53,14 @@ class _BoardPageState extends State<BoardPage> {
                 create: (context) => SearchCubit(),
                 child: Scaffold(
                   floatingActionButton: FloatingActionButton(
-                    onPressed: () => handleFormButtonPressed(context),
+                    onPressed: () => widget.handleFormButtonPressed(context),
                     child: const Icon(Icons.edit),
                   ),
                   drawer: const BoardDrawer(),
-                  appBar: buildAppBar(context, state.current),
+                  appBar: widget.buildAppBar(context, state.current),
                   body: widget.showWarning
-                      ? buildWarning()
-                      : buildTabBarView(state.current, state.boards, _scrollController),
+                      ? widget.buildWarning()
+                      : widget.buildTabBarView(state.current, state.boards, _scrollController),
                 ),
               ),
             );

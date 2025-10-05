@@ -15,8 +15,8 @@ extension BoardDrawerBuilders on BoardDrawer {
     return Container(
       padding: const EdgeInsets.all(10.0),
       width: double.infinity,
-      child: BlocProvider<PackageInfoCubit>(
-        create: (context) => sl<PackageInfoCubit>()..getPackageInfo(),
+      child: BlocProvider<PackageInfoCubit>.value(
+        value: sl<PackageInfoCubit>()..getPackageInfo(),
         child: BlocBuilder<PackageInfoCubit, PackageInfoState>(
           builder: (context, state) {
             if (state is PackageInfoLoaded) {
