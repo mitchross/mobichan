@@ -49,14 +49,6 @@ class _CarouselPageState extends State<CarouselPage> {
     videoPlayerControllers = {};
   }
 
-  @override
-  void dispose() {
-    for (var controller in videoPlayerControllers.values) {
-      controller.dispose();
-    }
-    super.dispose();
-  }
-
   void onPageChanged(int index) {
     setState(() {
       videoPlayerControllers[currentIndex]?.stop();

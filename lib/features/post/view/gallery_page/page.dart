@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:mobichan/features/post/post.dart';
-import 'package:mobichan/features/post/widgets/video_thumbnail_widget.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:mobichan/localization.dart';
 import 'package:easy_localization/easy_localization.dart';
@@ -37,7 +36,6 @@ class GalleryPage extends StatelessWidget {
           mainAxisSpacing: 3.0,
         ),
         itemBuilder: (BuildContext context, int index) {
-          final post = args.imagePosts[index];
           return InkWell(
             onTap: () => handleImageTap(
               context: context,
@@ -47,12 +45,10 @@ class GalleryPage extends StatelessWidget {
             ),
             child: Hero(
               tag: "image$index",
-              child: post.isVideo
-                  ? VideoThumbnailWidget(board: args.board, post: post)
-                  : ImageWidget(
-                      board: args.board,
-                      post: post,
-                    ),
+              child: ImageWidget(
+                board: args.board,
+                post: args.imagePosts[index],
+              ),
             ),
           );
         },

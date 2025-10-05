@@ -69,10 +69,9 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
   }
 
   @override
-  void dispose() {
+  Future<void> dispose() async {
+    await _controller!.dispose();
     super.dispose();
-    _controller!.removeListener(listener);
-    _controller!.dispose();
   }
 
   void listener() async {
