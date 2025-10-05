@@ -6,10 +6,23 @@ import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/features/sort/sort.dart';
 import 'package:mobichan/features/board/board.dart';
 
-class BoardPage extends StatelessWidget {
+class BoardPage extends StatefulWidget {
   final bool showWarning;
 
   const BoardPage({this.showWarning = false, super.key});
+
+  @override
+  State<BoardPage> createState() => _BoardPageState();
+}
+
+class _BoardPageState extends State<BoardPage> {
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,9 +56,9 @@ class BoardPage extends StatelessWidget {
                   ),
                   drawer: const BoardDrawer(),
                   appBar: buildAppBar(context, state.current),
-                  body: showWarning
+                  body: widget.showWarning
                       ? buildWarning()
-                      : buildTabBarView(state.current, state.boards),
+                      : buildTabBarView(state.current, state.boards, _scrollController),
                 ),
               ),
             );

@@ -7,7 +7,8 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 
 class ThreadsPage extends StatefulWidget {
   final Board board;
-  const ThreadsPage(this.board, {super.key});
+  final ScrollController? controller;
+  const ThreadsPage(this.board, {this.controller, super.key});
 
   @override
   State<ThreadsPage> createState() => _ThreadsPageState();
@@ -39,6 +40,7 @@ class _ThreadsPageState extends State<ThreadsPage> {
                         board: widget.board,
                         threads: threadsState.threads,
                         sort: sortState.sort,
+                        controller: widget.controller,
                       );
                     } else {
                       return widget.buildLoading();

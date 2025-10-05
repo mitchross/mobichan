@@ -62,14 +62,14 @@ extension BoardPageBuilders on BoardPage {
     );
   }
 
-  Widget buildTabBarView(Board board, List<Board> boards) {
+  Widget buildTabBarView(Board board, List<Board> boards, ScrollController controller) {
     return Stack(
       children: [
         TabBarView(
           physics: const NeverScrollableScrollPhysics(),
           children: boards
               .map(
-                (board) => ThreadsPage(board),
+                (board) => ThreadsPage(board, controller: controller),
               )
               .toList(),
         ),

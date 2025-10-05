@@ -14,6 +14,7 @@ extension ThreadsPageBuilders on ThreadsPage {
     required Board board,
     required List<Post> threads,
     required Sort sort,
+    ScrollController? controller,
   }) {
     return MultiBlocListener(
       listeners: [
@@ -49,12 +50,13 @@ extension ThreadsPageBuilders on ThreadsPage {
             return RefreshIndicator(
               onRefresh: () => handleRefresh(context, state),
               child: Scrollbar(
+                controller: controller,
                 child: SettingProvider(
                   settingTitle: 'grid_view',
                   builder: (isGridView) {
                     return isGridView.value
-                        ? getGridView(threads, sort)
-                        : getListView(threads, sort);
+                        ? getGridView(threads, sort, controller)
+                        : getListView(threads, sort, controller);
                   },
                 ),
               ),
@@ -92,8 +94,9 @@ extension ThreadsPageBuilders on ThreadsPage {
     }
   }
 
-  Widget getListView(List<Post> threads, Sort sort) {
+  Widget getListView(List<Post> threads, Sort sort, ScrollController? controller) {
     return ListView.separated(
+      controller: controller,
       primary: false,
       physics: const BouncingScrollPhysics(),
       itemCount: threads.length,
@@ -126,11 +129,12 @@ extension ThreadsPageBuilders on ThreadsPage {
     );
   }
 
-  Widget getGridView(List<Post> threads, Sort sort) {
+  Widget getGridView(List<Post> threads, Sort sort, ScrollController? controller) {
     return Builder(builder: (context) {
       return Container(
         color: Theme.of(context).dividerColor,
         child: MasonryGridView.builder(
+          controller: controller,
           primary: false,
           itemCount: threads.length,
           mainAxisSpacing: 1,
