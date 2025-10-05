@@ -16,33 +16,11 @@ extension ImageWidgetBuilders on ImageWidgetState {
     );
   }
 
-  Widget buildImage(String imageUrl,  List<Setting> settings) {
-     bool crop = settings.findByTitle('center_crop_image')?.value as bool;
-
-    if (widget.post.isVideo) {
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.network(
-            widget.post.getThumbnailUrl(widget.board)!,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, widget, progress) {
-              return buildLoading();
-            },
-          ),
-          const Center(
-            child: Icon(
-              Icons.play_circle_outline,
-              color: Colors.white,
-              size: 60,
-            ),
-          ),
-        ],
-      );
-    }
+  Widget buildImage(String imageUrl, List<Setting> settings) {
+    bool crop = settings.findByTitle('center_crop_image')?.value as bool;
 
     return CachedNetworkImage(
-      fit: crop ? BoxFit.fitHeight :  BoxFit.cover,
+      fit: crop ? BoxFit.fitHeight : BoxFit.cover,
       imageUrl: imageUrl,
       placeholder: (context, url) {
         return Image.network(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:mobichan/features/post/post.dart';
+import 'package:mobichan/features/post/widgets/video_thumbnail_widget.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 
 class ThumbnailWidget extends StatefulWidget {
@@ -29,11 +30,16 @@ class ThumbnailWidgetState extends State<ThumbnailWidget> {
       borderRadius: BorderRadius.circular(widget.borderRadius),
       child: SizedBox(
         height: widget.height,
-        child: ImageWidget(
-          board: widget.board,
-          post: widget.post,
-          fullRes: widget.fullRes,
-        ),
+        child: widget.post.isVideo
+            ? VideoThumbnailWidget(
+                board: widget.board,
+                post: widget.post,
+              )
+            : ImageWidget(
+                board: widget.board,
+                post: widget.post,
+                fullRes: widget.fullRes,
+              ),
       ),
     );
   }

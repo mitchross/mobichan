@@ -1,0 +1,1 @@
+export 'video_thumbnail_widget/widget.dart';
