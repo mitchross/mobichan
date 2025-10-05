@@ -123,7 +123,7 @@ class Post extends Equatable {
 
   String? getThumbnailUrl(Board board) {
     if (tim != null) {
-      return 'https://i.4cdn.org/${board.board}/${tim}s${ext}';
+      return 'https://i.4cdn.org/${board.board}/${tim}s.jpg';
     }
     return null;
   }
