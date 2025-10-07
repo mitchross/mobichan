@@ -7,8 +7,7 @@ import 'package:mobichan_domain/mobichan_domain.dart';
 
 class ThreadsPage extends StatefulWidget {
   final Board board;
-  final ScrollController? controller;
-  const ThreadsPage(this.board, {this.controller, super.key});
+  const ThreadsPage(this.board, {super.key});
 
   @override
   State<ThreadsPage> createState() => _ThreadsPageState();
@@ -16,6 +15,13 @@ class ThreadsPage extends StatefulWidget {
 
 class _ThreadsPageState extends State<ThreadsPage> {
   final List<int> threadsCountHistory = [];
+  final ScrollController _scrollController = ScrollController();
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -40,7 +46,7 @@ class _ThreadsPageState extends State<ThreadsPage> {
                         board: widget.board,
                         threads: threadsState.threads,
                         sort: sortState.sort,
-                        controller: widget.controller,
+                        controller: _scrollController,
                       );
                     } else {
                       return widget.buildLoading();

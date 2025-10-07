@@ -136,12 +136,15 @@ class ImageWidgetState extends State<ImageWidget> {
     final highResolutionThumbnailsWifi =
         settings.findByTitle('high_res_thumbnails_wifi')?.value as bool;
 
+    if (post.isVideo) {
+      return post.getThumbnailUrl(board)!;
+    }
+
     if ((widget.fullRes ||
-            ((connectivityStatus == ConnectivityResult.wifi &&
-                    highResolutionThumbnailsWifi) ||
-                (connectivityStatus == ConnectivityResult.mobile &&
-                    highResolutionThumbnailsMobile))) &&
-        !post.isVideo) {
+        ((connectivityStatus == ConnectivityResult.wifi &&
+                highResolutionThumbnailsWifi) ||
+            (connectivityStatus == ConnectivityResult.mobile &&
+                highResolutionThumbnailsMobile)))) {
       return post.getImageUrl(board)!;
     } else {
       return post.getThumbnailUrl(board)!;

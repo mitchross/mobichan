@@ -69,7 +69,7 @@ extension BoardPageBuilders on BoardPage {
           physics: const NeverScrollableScrollPhysics(),
           children: boards
               .map(
-                (board) => ThreadsPage(board, controller: controller),
+                (board) => ThreadsPage(board),
               )
               .toList(),
         ),

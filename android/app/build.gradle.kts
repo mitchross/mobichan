@@ -13,14 +13,18 @@ android {
     ndkVersion = "27.0.12077973"
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
         // Required for libraries needing Java 8+ desugaring (e.g., flutter_local_notifications)
         isCoreLibraryDesugaringEnabled = true
     }
 
     kotlinOptions {
-        jvmTarget = JavaVersion.VERSION_11.toString()
+        jvmTarget = JavaVersion.VERSION_17.toString()
+    }
+
+    tasks.withType<JavaCompile> {
+        options.compilerArgs.addAll(listOf("-Xlint:deprecation", "-Xlint:-options"))
     }
 
     defaultConfig {

@@ -37,27 +37,25 @@ extension BoardDrawerBuilders on BoardDrawer {
     return ListView(
       physics: const NeverScrollableScrollPhysics(),
       shrinkWrap: true,
-      children: [
-        buildBoards(),
-        buildHistory(),
-        buildSettings(),
-      ],
+      children: [buildBoards(), buildHistory(), buildSettings()],
     );
   }
 
   Widget buildSettings() {
-    return Builder(builder: (context) {
-      return BlocProvider<SearchCubit>(
-        create: (context) => SearchCubit(),
-        child: BoardExpansionTileWidget(
-          onTap: () {
-            Navigator.of(context).pushNamed(SettingsPage.routeName);
-          },
-          title: kSettings.tr(),
-          icon: Icons.settings,
-        ),
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return BlocProvider<SearchCubit>(
+          create: (context) => SearchCubit(),
+          child: BoardExpansionTileWidget(
+            onTap: () {
+              Navigator.of(context).pushNamed(SettingsPage.routeName);
+            },
+            title: kSettings.tr(),
+            icon: Icons.settings,
+          ),
+        );
+      },
+    );
   }
 
   Widget buildBoards() {
@@ -136,30 +134,32 @@ extension BoardDrawerBuilders on BoardDrawer {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade700,
       highlightColor: Colors.grey.shade600,
-      child: ListView.builder(itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.only(
-              left: 56.0, top: 14.0, bottom: 14.0, right: 15.0),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Container(
-                width: 180,
-                height: 15.0,
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(100),
+      child: ListView.builder(
+        itemBuilder: (context, index) {
+          return Padding(
+            padding: const EdgeInsets.only(
+              left: 56.0,
+              top: 14.0,
+              bottom: 14.0,
+              right: 15.0,
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Container(
+                  width: 180,
+                  height: 15.0,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.circular(100),
+                  ),
                 ),
-              ),
-              const Icon(
-                Icons.favorite,
-                color: Colors.white,
-                size: 20.0,
-              )
-            ],
-          ),
-        );
-      }),
+                const Icon(Icons.favorite, color: Colors.white, size: 20.0),
+              ],
+            ),
+          );
+        },
+      ),
     );
   }
 
@@ -228,29 +228,29 @@ extension BoardDrawerBuilders on BoardDrawer {
   }
 
   Widget buildHistoryListTile(Post thread) {
-    return Builder(builder: (context) {
-      return ListTile(
-        onTap: () => handleOnHistoryTap(context, thread),
-        contentPadding: const EdgeInsets.only(left: 56, right: 10),
-        dense: true,
-        minVerticalPadding: 0,
-        horizontalTitleGap: 0,
-        trailing: Text(
-          '/${thread.boardId}/',
-          style: Theme.of(context).textTheme.bodySmall,
-        ),
-        title: Text(
-          thread.displayTitle.removeHtmlTags,
-          maxLines: 1,
-          overflow: TextOverflow.ellipsis,
-        ),
-      );
-    });
+    return Builder(
+      builder: (context) {
+        return ListTile(
+          onTap: () => handleOnHistoryTap(context, thread),
+          contentPadding: const EdgeInsets.only(left: 56, right: 10),
+          dense: true,
+          minVerticalPadding: 0,
+          horizontalTitleGap: 0,
+          trailing: Text(
+            '/${thread.boardId}/',
+            style: Theme.of(context).textTheme.bodySmall,
+          ),
+          title: Text(
+            thread.displayTitle.removeHtmlTags,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+          ),
+        );
+      },
+    );
   }
 
   Widget buildLoading() {
-    return const Center(
-      child: CircularProgressIndicator(),
-    );
+    return const Center(child: CircularProgressIndicator());
   }
 }

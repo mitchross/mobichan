@@ -56,11 +56,31 @@ class PostRemoteDatasourceImpl implements PostRemoteDatasource {
     final responseJson = await networkManager.makeRequest<Map<String, dynamic>>(
       url: '$apiUrl/${board.board}/thread/${thread.no}.json',
     );
+    print('[API] Raw JSON response for thread: ${thread.no}');
+    print(responseJson);
     final maps = responseJson['posts'] as List;
-    return List.generate(
-      maps.length,
-      (index) => PostModel.fromJson(maps[index]),
-    );
+    final posts = <PostModel>[];
+    for (var i = 0; i < maps.length; i++) {
+      final raw = maps[i];
+      print('[API] Raw post JSON [$i]: $raw');
+      final post = PostModel.fromJson(raw);
+      print('[API] Parsed Post ${post.no}');
+      print('  ext: ${post.ext}');
+      print('  filename: ${post.filename}');
+      print('  tim: ${post.tim}');
+      print('  tnW: ${post.tnW}');
+      print('  tnH: ${post.tnH}');
+      print('  isWebm: ${post.ext == ".webm"}');
+      final thumbUrl = post.getThumbnailUrl(board);
+      final imageUrl = post.getImageUrl(board);
+      print('  getThumbnailUrl: $thumbUrl');
+      print('  getImageUrl: $imageUrl');
+      if (thumbUrl == null) {
+        print('  [WARN] Thumbnail URL is null for post ${post.no}');
+      }
+      posts.add(post);
+    }
+    return posts;
   }
 
   @override

@@ -30,15 +30,9 @@ class _BoardPageState extends State<BoardPage> {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider<SortCubit>(
-          create: (_) => sl<SortCubit>()..getSort(),
-        ),
-        BlocProvider<PostFormCubit>(
-          create: (_) => PostFormCubit(),
-        ),
-        BlocProvider<ThreadsCubit>(
-          create: (_) => sl<ThreadsCubit>(),
-        ),
+        BlocProvider<SortCubit>(create: (_) => sl<SortCubit>()..getSort()),
+        BlocProvider<PostFormCubit>(create: (_) => PostFormCubit()),
+        BlocProvider<ThreadsCubit>(create: (_) => sl<ThreadsCubit>()),
         BlocProvider<FavoritesCubit>(
           create: (_) => sl<FavoritesCubit>()..getFavorites(),
         ),
@@ -60,7 +54,11 @@ class _BoardPageState extends State<BoardPage> {
                   appBar: widget.buildAppBar(context, state.current),
                   body: widget.showWarning
                       ? widget.buildWarning()
-                      : widget.buildTabBarView(state.current, state.boards, _scrollController),
+                      : widget.buildTabBarView(
+                          state.current,
+                          state.boards,
+                          _scrollController,
+                        ),
                 ),
               ),
             );

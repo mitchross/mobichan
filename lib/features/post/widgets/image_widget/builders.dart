@@ -10,26 +10,55 @@ extension ImageWidgetBuilders on ImageWidgetState {
     return Shimmer.fromColors(
       baseColor: Colors.grey.shade700,
       highlightColor: Colors.grey.shade600,
-      child: Container(
-        color: Colors.white,
-      ),
+      child: Container(color: Colors.white),
     );
   }
 
-  Widget buildImage(String imageUrl,  List<Setting> settings) {
-     bool crop = settings.findByTitle('center_crop_image')?.value as bool;
+  Widget buildImage(String imageUrl, List<Setting> settings) {
+    bool crop = settings.findByTitle('center_crop_image')?.value as bool;
 
-    if (widget.post.isVideo) {
-      return Stack(
-        fit: StackFit.expand,
-        children: [
-          Image.network(
-            widget.post.getThumbnailUrl(widget.board)!,
-            fit: BoxFit.cover,
-            loadingBuilder: (context, widget, progress) {
-              return buildLoading();
-            },
-          ),
+    return Stack(
+      fit: StackFit.expand,
+      children: [
+        CachedNetworkImage(
+          fit: crop ? BoxFit.fitHeight : BoxFit.cover,
+          imageUrl: imageUrl,
+          placeholder: (context, url) {
+            return Image.network(
+              widget.post.getThumbnailUrl(widget.board) ?? '',
+              fit: BoxFit.cover,
+              errorBuilder: (context, error, stackTrace) {
+                // Fallback for missing thumbnail
+                return Container(
+                  color: Colors.grey.shade800,
+                  child: const Center(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [
+                        Icon(
+                          Icons.image_not_supported,
+                          color: Colors.white,
+                          size: 40,
+                        ),
+                        SizedBox(height: 8),
+                        Text(
+                          'No preview available',
+                          style: TextStyle(color: Colors.white, fontSize: 14),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              },
+              loadingBuilder: (context, widget, progress) {
+                return buildLoading();
+              },
+            );
+          },
+          fadeInDuration: Duration.zero,
+        ),
+        if (widget.post.isVideo)
           const Center(
             child: Icon(
               Icons.play_circle_outline,
@@ -37,23 +66,7 @@ extension ImageWidgetBuilders on ImageWidgetState {
               size: 60,
             ),
           ),
-        ],
-      );
-    }
-
-    return CachedNetworkImage(
-      fit: crop ? BoxFit.fitHeight :  BoxFit.cover,
-      imageUrl: imageUrl,
-      placeholder: (context, url) {
-        return Image.network(
-          widget.post.getThumbnailUrl(widget.board)!,
-          fit: BoxFit.cover,
-          loadingBuilder: (context, widget, progress) {
-            return buildLoading();
-          },
-        );
-      },
-      fadeInDuration: Duration.zero,
+      ],
     );
   }
 }
