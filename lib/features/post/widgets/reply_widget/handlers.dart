@@ -133,15 +133,23 @@ extension ReplyWidgetHandlers on ReplyWidget {
   }
 
   void handleShare() async {
-    FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
-    final image = await screenshotController.capture();
-    if (image != null) {
-      final directory = await getTemporaryDirectory();
-      final imagePath = await File('${directory.path}/image.png').create();
-      await imagePath.writeAsBytes(image);
-      await Share.shareXFiles([
-        XFile(imagePath.path),
-      ]); // Replaced Share.shareFiles
+    try {
+      FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
+      final image = await screenshotController.capture();
+      if (image != null) {
+        final directory = await getTemporaryDirectory();
+        final imagePath = await File('${directory.path}/post_${post.no}.png').create();
+        await imagePath.writeAsBytes(image);
+
+        // Share with both the screenshot and the post URL
+        final postUrl = 'https://boards.4channel.org/${board.board}/thread/${post.resto}#p${post.no}';
+        await Share.shareXFiles(
+          [XFile(imagePath.path)],
+          text: 'Mobichan post: $postUrl',
+        );
+      }
+    } catch (e) {
+      log('Error sharing post: $e');
     }
   }
 }

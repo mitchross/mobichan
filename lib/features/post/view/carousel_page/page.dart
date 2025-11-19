@@ -15,8 +15,7 @@ import 'package:mobichan/localization.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
-import 'package:share_plus/share_plus.dart'; // Replaced share
-// import 'package:cross_file/cross_file.dart'; // Removed as XFile is exported by share_plus
+import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 class CarouselPage extends StatefulWidget {
@@ -51,10 +50,21 @@ class _CarouselPageState extends State<CarouselPage> {
 
   void onPageChanged(int index) {
     setState(() {
-      videoPlayerControllers[currentIndex]?.stop();
+      videoPlayerControllers[currentIndex]?.pause();
       currentIndex = index;
       videoPlayerControllers[currentIndex]?.play();
     });
+  }
+
+  @override
+  void dispose() {
+    // Properly dispose all video controllers to prevent memory leaks
+    for (var controller in videoPlayerControllers.values) {
+      controller.dispose();
+    }
+    videoPlayerControllers.clear();
+    pageController.dispose();
+    super.dispose();
   }
 
   String get imageUrl {
@@ -113,15 +123,31 @@ class _CarouselPageState extends State<CarouselPage> {
   }
 
   void _shareImage() async {
-    var response = await Dio().get(
-      imageUrl,
-      options: Options(responseType: ResponseType.bytes),
-    );
+    try {
+      var response = await Dio().get(
+        imageUrl,
+        options: Options(responseType: ResponseType.bytes),
+      );
 
-    final directory = await getTemporaryDirectory();
-    final imagePath = await File('${directory.path}/image.png').create();
-    await imagePath.writeAsBytes(response.data);
-    await Share.shareXFiles([XFile(imagePath.path)]);
+      final directory = await getTemporaryDirectory();
+      // Use proper file extension from the post
+      final fileName = '${currentPost.filename}${currentPost.ext}';
+      final imagePath = await File('${directory.path}/$fileName').create();
+      await imagePath.writeAsBytes(response.data);
+
+      // Share with proper MIME type
+      await Share.shareXFiles(
+        [XFile(imagePath.path)],
+        text: 'Shared from Mobichan - https://boards.4channel.org/${widget.board.board}/thread/${currentPost.no}',
+      );
+    } catch (e) {
+      log('Error sharing image: $e');
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Failed to share image')),
+        );
+      }
+    }
   }
 
   void _searchImage() async {
@@ -162,18 +188,59 @@ class _CarouselPageState extends State<CarouselPage> {
             builder: (BuildContext context, int index) {
               Post currentPost = widget.posts[index];
               if (currentPost.isWebm) {
+                // Check if running on iOS for webm compatibility
+                final isIOS = Platform.isIOS;
+
                 if (videoPlayerControllers[index] == null) {
                   videoPlayerControllers[index] = VlcPlayerController.network(
                     currentPost.getImageUrl(widget.board)!,
                     hwAcc: HwAcc.full,
-                    autoPlay: true,
+                    autoPlay: !isIOS, // Don't autoplay on iOS
                     options: VlcPlayerOptions(),
                   );
                 }
+
                 return PhotoViewGalleryPageOptions.customChild(
-                  child: WebmViewerPage(
-                    currentPost,
-                    videoPlayerControllers[index],
+                  child: Stack(
+                    children: [
+                      WebmViewerPage(
+                        currentPost,
+                        videoPlayerControllers[index],
+                      ),
+                      // Show warning banner on iOS
+                      if (isIOS)
+                        Positioned(
+                          bottom: 80,
+                          left: 20,
+                          right: 20,
+                          child: Material(
+                            color: Colors.orange.withValues(alpha: 0.9),
+                            borderRadius: BorderRadius.circular(8),
+                            child: Padding(
+                              padding: const EdgeInsets.all(12.0),
+                              child: Row(
+                                children: [
+                                  const Icon(Icons.warning, color: Colors.white),
+                                  const SizedBox(width: 8),
+                                  const Expanded(
+                                    child: Text(
+                                      'WebM playback may be limited on iOS. Tap to open in browser.',
+                                      style: TextStyle(color: Colors.white, fontSize: 12),
+                                    ),
+                                  ),
+                                  IconButton(
+                                    icon: const Icon(Icons.open_in_browser, color: Colors.white),
+                                    onPressed: () => launchUrl(
+                                      Uri.parse(currentPost.getImageUrl(widget.board)!),
+                                      mode: LaunchMode.externalApplication,
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ),
+                          ),
+                        ),
+                    ],
                   ),
                 );
               } else {

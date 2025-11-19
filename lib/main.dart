@@ -13,7 +13,12 @@ void main() async {
   await Firebase.initializeApp();
   await FirebaseAuth.instance.signInAnonymously();
   await FirebaseAppCheck.instance.activate();
-  PaintingBinding.instance.imageCache.maximumSizeBytes = 1024 * 1024 * 300;
+
+  // Optimized image cache for better memory management (150MB instead of 300MB)
+  // This prevents OOM crashes on lower-end devices while still providing good performance
+  PaintingBinding.instance.imageCache.maximumSizeBytes = 1024 * 1024 * 150;
+  PaintingBinding.instance.imageCache.maximumSize = 100; // Limit number of cached images
+
   await EasyLocalization.ensureInitialized();
   await dependency_injector.init();
   timeago.setLocaleMessages('fr', timeago.FrMessages());

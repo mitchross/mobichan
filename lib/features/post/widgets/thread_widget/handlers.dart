@@ -53,9 +53,14 @@ extension ThreadWidgetHandlers on ThreadWidget {
   }
 
   void handleShare() async {
-    await Share.share(
-      // Added await, Replaced Share.share
-      'https://boards.4channel.org/${board.board}/thread/${thread.no}',
-    );
+    try {
+      final threadUrl = 'https://boards.4channel.org/${board.board}/thread/${thread.no}';
+      await Share.share(
+        threadUrl,
+        subject: thread.sub ?? 'Thread from Mobichan',
+      );
+    } catch (e) {
+      log('Error sharing thread: $e');
+    }
   }
 }
