@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobichan/features/setting/setting.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
-import 'package:string_similarity/string_similarity.dart';
 
 class SettingProvider extends StatelessWidget {
   final String settingTitle;
@@ -27,14 +26,20 @@ class SettingProvider extends StatelessWidget {
         final setting = settings.findByTitle(settingTitle);
 
         if (setting == null) {
-          final closestMatch =
-              settingTitle.bestMatch(settings.map((s) => s.title).toList());
+          // Simple case-insensitive search for similar settings
+          final similarSettings = settings
+              .where((s) => s.title.toLowerCase().contains(settingTitle.toLowerCase()) ||
+                  settingTitle.toLowerCase().contains(s.title.toLowerCase()))
+              .take(3)
+              .map((s) => s.title)
+              .toList();
 
           var errorMessage = 'Setting "$settingTitle" not found.';
 
-          if (closestMatch.bestMatch.rating! > 0.3) {
-            errorMessage +=
-                '\nDid you mean "${closestMatch.bestMatch.target}"?';
+          if (similarSettings.isNotEmpty) {
+            errorMessage += '\nSimilar settings: ${similarSettings.join(", ")}';
+          } else {
+            errorMessage += '\nAvailable settings: ${settings.map((s) => s.title).take(5).join(", ")}...';
           }
 
           throw Exception(errorMessage);

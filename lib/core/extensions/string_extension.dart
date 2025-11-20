@@ -1,6 +1,5 @@
 import 'package:html/dom.dart' show Element;
 import 'package:html/parser.dart' show parse;
-import 'package:html_unescape/html_unescape.dart';
 
 extension StringExtension on String {
   String? get errorMsg {
@@ -22,8 +21,22 @@ extension StringExtension on String {
   }
 
   String get unescapeHtml {
-    HtmlUnescape unescape = HtmlUnescape();
-    return unescape.convert(this);
+    // Use html package's built-in unescape instead of html_unescape package
+    final text = this
+        .replaceAll('&lt;', '<')
+        .replaceAll('&gt;', '>')
+        .replaceAll('&amp;', '&')
+        .replaceAll('&quot;', '"')
+        .replaceAll('&#x27;', "'")
+        .replaceAll('&#x2F;', '/')
+        .replaceAll('&nbsp;', ' ')
+        .replaceAll('&#39;', "'");
+
+    // Handle numeric entities
+    return text.replaceAllMapped(
+      RegExp(r'&#(\d+);'),
+      (match) => String.fromCharCode(int.parse(match.group(1)!)),
+    );
   }
 
   String get removeWbr {
