@@ -29,7 +29,7 @@ dependencies:
   path: ^1.9.1
 
   # Media & Files
-  flutter_vlc_player: ^7.4.3
+  flutter_vlc_player: ^7.4.4
   gal: ^2.3.2
   file_picker: ^10.1.9
 
