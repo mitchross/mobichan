@@ -188,59 +188,26 @@ class _CarouselPageState extends State<CarouselPage> {
             builder: (BuildContext context, int index) {
               Post currentPost = widget.posts[index];
               if (currentPost.isWebm) {
-                // Check if running on iOS for webm compatibility
-                final isIOS = Platform.isIOS;
-
                 if (videoPlayerControllers[index] == null) {
                   videoPlayerControllers[index] = VlcPlayerController.network(
                     currentPost.getImageUrl(widget.board)!,
                     hwAcc: HwAcc.full,
-                    autoPlay: !isIOS, // Don't autoplay on iOS
-                    options: VlcPlayerOptions(),
+                    autoPlay: true,
+                    options: VlcPlayerOptions(
+                      advanced: VlcAdvancedOptions([
+                        VlcAdvancedOptions.networkCaching(1500),
+                      ]),
+                      video: VlcVideoOptions([
+                        VlcVideoOptions.dropLateFrames(true),
+                        VlcVideoOptions.skipFrames(true),
+                      ]),
+                    ),
                   );
                 }
-
                 return PhotoViewGalleryPageOptions.customChild(
-                  child: Stack(
-                    children: [
-                      WebmViewerPage(
-                        currentPost,
-                        videoPlayerControllers[index],
-                      ),
-                      // Show warning banner on iOS
-                      if (isIOS)
-                        Positioned(
-                          bottom: 80,
-                          left: 20,
-                          right: 20,
-                          child: Material(
-                            color: Colors.orange.withValues(alpha: 0.9),
-                            borderRadius: BorderRadius.circular(8),
-                            child: Padding(
-                              padding: const EdgeInsets.all(12.0),
-                              child: Row(
-                                children: [
-                                  const Icon(Icons.warning, color: Colors.white),
-                                  const SizedBox(width: 8),
-                                  const Expanded(
-                                    child: Text(
-                                      'WebM playback may be limited on iOS. Tap to open in browser.',
-                                      style: TextStyle(color: Colors.white, fontSize: 12),
-                                    ),
-                                  ),
-                                  IconButton(
-                                    icon: const Icon(Icons.open_in_browser, color: Colors.white),
-                                    onPressed: () => launchUrl(
-                                      Uri.parse(currentPost.getImageUrl(widget.board)!),
-                                      mode: LaunchMode.externalApplication,
-                                    ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                        ),
-                    ],
+                  child: WebmViewerPage(
+                    currentPost,
+                    videoPlayerControllers[index],
                   ),
                 );
               } else {
