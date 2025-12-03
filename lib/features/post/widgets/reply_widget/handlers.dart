@@ -1,8 +1,6 @@
 import 'dart:io';
-
 import 'dart:developer';
 
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter/material.dart';
 import 'package:gal/gal.dart';
 import 'package:html/parser.dart';
@@ -115,7 +113,6 @@ extension ReplyWidgetHandlers on ReplyWidget {
             .showSnackBar(errorSnackbar(context, kSavePostError.tr()));
         return;
       }
-      FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
       final image = await screenshotController.capture();
       await Gal.putImageBytes(
         image!,
@@ -134,7 +131,6 @@ extension ReplyWidgetHandlers on ReplyWidget {
 
   void handleShare() async {
     try {
-      FirebaseAnalytics.instance.logEvent(name: 'screenshot_post');
       final image = await screenshotController.capture();
       if (image != null) {
         final directory = await getTemporaryDirectory();

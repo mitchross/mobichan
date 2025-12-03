@@ -1,7 +1,6 @@
 import 'dart:io';
 
 import 'package:equatable/equatable.dart';
-import 'package:firebase_analytics/firebase_analytics.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mobichan/localization.dart';
 import 'package:mobichan_data/mobichan_data.dart';
@@ -45,7 +44,6 @@ class ThreadsCubit extends Cubit<ThreadsState> {
       fileName: file?.uri.pathSegments.last,
     );
     await repository.insertUserPost(thread);
-    FirebaseAnalytics.instance.logEvent(name: 'post_thread');
     return thread;
   }
 

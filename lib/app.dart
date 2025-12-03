@@ -24,10 +24,6 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
-
-    final notificationManager = NotificationManager(navigatorKey: navigatorKey);
-    notificationManager.setup();
-    notificationManager.setupInteractedMessage();
     WidgetsBinding.instance.addObserver(this);
   }
 
