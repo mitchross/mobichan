@@ -17,29 +17,45 @@ extension ImageWidgetBuilders on ImageWidgetState {
     );
   }
 
-  Widget buildImage(String imageUrl,  List<Setting> settings) {
-     bool crop = settings.findByTitle('center_crop_image')?.value as bool;
+  Widget buildImage(String imageUrl, List<Setting> settings) {
+    bool crop = settings.findByTitle('center_crop_image')?.value as bool;
 
     return Stack(
       fit: StackFit.expand,
       children: [
         CachedNetworkImage(
-          fit: crop ? BoxFit.fitHeight :  BoxFit.cover,
+          fit: crop ? BoxFit.fitHeight : BoxFit.cover,
           imageUrl: imageUrl,
           httpHeaders: const {'User-Agent': userAgent},
-          errorWidget: (context, url, error) => const Center(
-            child: Icon(Icons.broken_image, color: Colors.grey),
-          ),
-          placeholder: (context, url) {
-            return Image.network(
-              widget.post.getThumbnailUrl(widget.board)!,
-              fit: BoxFit.cover,
-              headers: const {'User-Agent': userAgent},
-              loadingBuilder: (context, widget, progress) {
-                return buildLoading();
-              },
-              errorBuilder: (context, error, stackTrace) => const Center(
-                child: Icon(Icons.broken_image, color: Colors.grey),
+          placeholder: (context, url) => buildLoading(),
+          errorWidget: (context, url, error) {
+            // If main image fails, try loading thumbnail
+            if (url != widget.post.getThumbnailUrl(widget.board)) {
+              return CachedNetworkImage(
+                imageUrl: widget.post.getThumbnailUrl(widget.board)!,
+                httpHeaders: const {'User-Agent': userAgent},
+                fit: BoxFit.cover,
+                placeholder: (context, url) => buildLoading(),
+                errorWidget: (context, url, error) => Container(
+                  color: Colors.grey.shade800,
+                  child: const Center(
+                    child: Icon(
+                      Icons.broken_image,
+                      color: Colors.white54,
+                      size: 48,
+                    ),
+                  ),
+                ),
+              );
+            }
+            return Container(
+              color: Colors.grey.shade800,
+              child: const Center(
+                child: Icon(
+                  Icons.broken_image,
+                  color: Colors.white54,
+                  size: 48,
+                ),
               ),
             );
           },
