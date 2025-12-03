@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
@@ -7,7 +7,7 @@ import 'package:mobichan/constants.dart';
 
 class WebmViewerPage extends StatefulWidget {
   final Post post;
-  final VlcPlayerController? videoPlayerController;
+  final VideoController? videoPlayerController;
   const WebmViewerPage(this.post, this.videoPlayerController, {super.key});
 
   @override

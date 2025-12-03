@@ -1,16 +1,13 @@
-/// Open source credits and use from https://github.com/solid-software/flutter_vlc_player/blob/master/flutter_vlc_player/example/lib/vlc_player_with_controls.dart
-library;
 import 'dart:typed_data';
 
-import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:mobichan/constants.dart';
-import 'package:mobichan/features/post/post.dart';
-import 'package:mobichan/localization.dart';
+import 'package:mobichan/features/post/widgets/video_player_controls_widget/widget.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
-  final VlcPlayerController controller;
+  final VideoController controller;
   final bool showControls;
   final double aspectRatio;
   final bool isMuted;
@@ -31,8 +28,8 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
     with AutomaticKeepAliveClientMixin {
   static const _playerControlsBgColor = Colors.black87;
 
-  VlcPlayerController? _controller;
-
+  late final Player _player;
+  
   //
   final double initSnapshotRightPosition = 10;
   final double initSnapshotBottomPosition = 10;
@@ -43,8 +40,6 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
   double volumeValue = 50;
   String position = '';
   String duration = '';
-  int numberOfCaptions = 0;
-  int numberOfAudioTracks = 0;
   bool validPosition = false;
 
   //
@@ -57,45 +52,47 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
   @override
   void initState() {
     super.initState();
-    _controller = widget.controller;
-    _controller!.addListener(listener);
+    _player = widget.controller.player;
+    // Listen to streams for UI updates
+    _player.stream.position.listen((pos) {
+      if (!mounted) return;
+      setState(() {
+        sliderValue = pos.inSeconds.toDouble();
+        position = _formatDuration(pos);
+      });
+    });
+    _player.stream.duration.listen((dur) {
+      if (!mounted) return;
+      setState(() {
+        duration = _formatDuration(dur);
+        validPosition = dur.inSeconds > 0;
+      });
+    });
+    
     checkMuted();
+  }
+
+  String _formatDuration(Duration d) {
+    var str = d.toString().split('.')[0];
+    if (d.inHours == 0) {
+      return "${str.split(':')[1]}:${str.split(':')[2]}";
+    }
+    return str;
   }
 
   void checkMuted() {
     if (widget.isMuted) {
       _setSoundVolume(0.0);
+    } else {
+      _setSoundVolume(50.0); // Default volume
     }
   }
 
   @override
   Future<void> dispose() async {
-    await _controller!.dispose();
+    // Controller disposal should be handled by the parent who created it, 
+    // or if we created it, we dispose it. Here we receive it, so we assume parent handles it.
     super.dispose();
-  }
-
-  void listener() async {
-    if (!mounted) return;
-    //
-    if (_controller!.value.isInitialized) {
-      var oPosition = _controller!.value.position;
-      var oDuration = _controller!.value.duration;
-      if (oDuration.inHours == 0) {
-        var strPosition = oPosition.toString().split('.')[0];
-        var strDuration = oDuration.toString().split('.')[0];
-        position = "${strPosition.split(':')[1]}:${strPosition.split(':')[2]}";
-        duration = "${strDuration.split(':')[1]}:${strDuration.split(':')[2]}";
-      } else {
-        position = oPosition.toString().split('.')[0];
-        duration = oDuration.toString().split('.')[0];
-      }
-      validPosition = oDuration.compareTo(oPosition) >= 0;
-      sliderValue = validPosition ? oPosition.inSeconds.toDouble() : 0;
-      numberOfCaptions = _controller!.value.spuTracksCount;
-      numberOfAudioTracks = _controller!.value.audioTracksCount;
-      //
-      setState(() {});
-    }
   }
 
   @override
@@ -153,36 +150,45 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
                       color: Colors.white,
                       onPressed: _createCameraImage,
                     ),
-                    IconButton(
-                      icon: const Icon(Icons.cast),
-                      color: Colors.white,
-                      onPressed: _getRendererDevices,
-                    ),
+                    // Cast functionality removed as it's not natively supported by media_kit
                   ],
                 ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Size: ${_controller!.value.size.width.toInt()}x${_controller!.value.size.height.toInt()}',
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 10),
-                      ),
-                      const SizedBox(height: 5),
-                      Text(
-                        'Status: ${_controller!.value.playingState
-                                .toString()
-                                .split('.')[1]}',
-                        textAlign: TextAlign.center,
-                        overflow: TextOverflow.ellipsis,
-                        style:
-                            const TextStyle(color: Colors.white, fontSize: 10),
-                      ),
-                    ],
+                  child: StreamBuilder<int?>(
+                    stream: _player.stream.width,
+                    builder: (context, widthSnapshot) {
+                      return StreamBuilder<int?>(
+                        stream: _player.stream.height,
+                        builder: (context, heightSnapshot) {
+                          final width = widthSnapshot.data ?? 0;
+                          final height = heightSnapshot.data ?? 0;
+                          return Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Text(
+                                'Size: ${width}x$height',
+                                textAlign: TextAlign.center,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(color: Colors.white, fontSize: 10),
+                              ),
+                              const SizedBox(height: 5),
+                              StreamBuilder<bool>(
+                                stream: _player.stream.playing,
+                                builder: (context, snapshot) {
+                                  return Text(
+                                    'Status: ${snapshot.data == true ? "Playing" : "Paused"}',
+                                    textAlign: TextAlign.center,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(color: Colors.white, fontSize: 10),
+                                  );
+                                }
+                              ),
+                            ],
+                          );
+                        }
+                      );
+                    },
                   ),
                 ),
               ],
@@ -195,14 +201,13 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
             child: Stack(
               children: <Widget>[
                 Center(
-                  child: VlcPlayer(
-                    controller: _controller!,
+                  child: Video(
+                    controller: widget.controller,
                     aspectRatio: widget.aspectRatio,
-                    placeholder:
-                        const Center(child: CircularProgressIndicator()),
+                    controls: NoVideoControls, // We use our own controls
                   ),
                 ),
-                VideoPlayerControlsWidget(controller: _controller),
+                VideoPlayerControlsWidget(controller: widget.controller),
               ],
             ),
           ),
@@ -214,12 +219,18 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                IconButton(
-                  color: Colors.white,
-                  icon: _controller!.value.isPlaying
-                      ? const Icon(Icons.pause_circle_outline)
-                      : const Icon(Icons.play_circle_outline),
-                  onPressed: _togglePlaying,
+                StreamBuilder<bool>(
+                  stream: _player.stream.playing,
+                  builder: (context, snapshot) {
+                    final isPlaying = snapshot.data ?? false;
+                    return IconButton(
+                      color: Colors.white,
+                      icon: isPlaying
+                          ? const Icon(Icons.pause_circle_outline)
+                          : const Icon(Icons.play_circle_outline),
+                      onPressed: _togglePlaying,
+                    );
+                  }
                 ),
                 Expanded(
                   child: Row(
@@ -231,17 +242,23 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
                         style: const TextStyle(color: Colors.white),
                       ),
                       Expanded(
-                        child: Slider(
-                          activeColor: Colors.redAccent,
-                          inactiveColor: Colors.white70,
-                          value: sliderValue,
-                          min: 0.0,
-                          max: (!validPosition)
-                              ? 1.0
-                              : _controller!.value.duration.inSeconds
-                                  .toDouble(),
-                          onChanged:
-                              validPosition ? _onSliderPositionChanged : null,
+                        child: StreamBuilder<Duration>(
+                          stream: _player.stream.position,
+                          builder: (context, snapshot) {
+                            final pos = snapshot.data ?? Duration.zero;
+                            final dur = _player.state.duration;
+                            final max = dur.inSeconds.toDouble();
+                            final value = pos.inSeconds.toDouble().clamp(0.0, max > 0 ? max : 1.0);
+                            
+                            return Slider(
+                              activeColor: Colors.redAccent,
+                              inactiveColor: Colors.white70,
+                              value: value,
+                              min: 0.0,
+                              max: max > 0 ? max : 1.0,
+                              onChanged: (v) => _onSliderPositionChanged(v),
+                            );
+                          }
                         ),
                       ),
                       Text(
@@ -293,79 +310,37 @@ class VideoPlayerWidgetState extends State<VideoPlayerWidget>
     if (playbackSpeedIndex >= playbackSpeeds.length) {
       playbackSpeedIndex = 0;
     }
-    return await _controller!
-        .setPlaybackSpeed(playbackSpeeds.elementAt(playbackSpeedIndex));
+    await _player.setRate(playbackSpeeds.elementAt(playbackSpeedIndex));
+    setState(() {});
   }
 
-  void _setSoundVolume(value) {
+  void _setSoundVolume(double value) {
     setState(() {
       volumeValue = value;
     });
-    _controller!.setVolume(volumeValue.toInt());
+    _player.setVolume(volumeValue);
   }
 
   void _togglePlaying() async {
-    _controller!.value.isPlaying
-        ? await _controller!.pause()
-        : await _controller!.play();
+    await _player.playOrPause();
   }
 
   void _onSliderPositionChanged(double progress) {
     setState(() {
       sliderValue = progress.floor().toDouble();
     });
-    //convert to Milliseconds since VLC requires MS to set time
-    _controller!.setTime(sliderValue.toInt() * 1000);
-  }
-
-  void _getRendererDevices() async {
-    var castDevices = await _controller!.getRendererDevices();
-    //
-    if (castDevices.isNotEmpty) {
-      var selectedCastDeviceName = await showDialog(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Display Devices'),
-            content: SizedBox(
-              width: double.maxFinite,
-              height: 250,
-              child: ListView.builder(
-                itemCount: castDevices.keys.length + 1,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text(
-                      index < castDevices.keys.length
-                          ? castDevices.values.elementAt(index).toString()
-                          : 'Disconnect',
-                    ),
-                    onTap: () {
-                      Navigator.pop(
-                        context,
-                        index < castDevices.keys.length
-                            ? castDevices.keys.elementAt(index)
-                            : null,
-                      );
-                    },
-                  );
-                },
-              ),
-            ),
-          );
-        },
-      );
-      await _controller!.castToRenderer(selectedCastDeviceName);
-    } else {
-      ScaffoldMessenger.of(context)
-          .showSnackBar(SnackBar(content: const Text(kNoDisplayDevice).tr()));
-    }
+    _player.seek(Duration(seconds: sliderValue.toInt()));
   }
 
   void _createCameraImage() async {
-    var snapshot = await _controller!.takeSnapshot();
-    _overlayEntry?.remove();
-    _overlayEntry = _createSnapshotThumbnail(snapshot);
-    Overlay.of(context).insert(_overlayEntry!);
+    final snapshot = await _player.screenshot();
+    if (snapshot != null) {
+      _overlayEntry?.remove();
+      _overlayEntry = _createSnapshotThumbnail(snapshot);
+      if (mounted) {
+        Overlay.of(context).insert(_overlayEntry!);
+      }
+    }
   }
 
   OverlayEntry _createSnapshotThumbnail(Uint8List snapshot) {

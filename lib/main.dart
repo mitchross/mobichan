@@ -1,6 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:media_kit/media_kit.dart';
 import 'package:mobichan/app.dart';
 import 'package:timeago/timeago.dart' as timeago;
 import 'package:mobichan/dependency_injector.dart' as dependency_injector;
@@ -15,6 +16,7 @@ void main() async {
 
   await EasyLocalization.ensureInitialized();
   await dependency_injector.init();
+  MediaKit.ensureInitialized();
   timeago.setLocaleMessages('fr', timeago.FrMessages());
 
   runApp(

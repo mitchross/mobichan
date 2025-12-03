@@ -6,7 +6,8 @@ import 'dart:developer';
 
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:media_kit/media_kit.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 import 'package:gal/gal.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
@@ -17,6 +18,8 @@ import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
+
+import '../webm_viewer_page/page.dart';
 
 class CarouselPage extends StatefulWidget {
   final String heroTitle;
@@ -37,7 +40,7 @@ class CarouselPage extends StatefulWidget {
 
 class _CarouselPageState extends State<CarouselPage> {
   late PageController pageController;
-  late Map<int, VlcPlayerController> videoPlayerControllers;
+  late Map<int, VideoController> videoPlayerControllers;
   late int currentIndex;
 
   @override
@@ -50,9 +53,9 @@ class _CarouselPageState extends State<CarouselPage> {
 
   void onPageChanged(int index) {
     setState(() {
-      videoPlayerControllers[currentIndex]?.pause();
+      videoPlayerControllers[currentIndex]?.player.pause();
       currentIndex = index;
-      videoPlayerControllers[currentIndex]?.play();
+      videoPlayerControllers[currentIndex]?.player.play();
     });
   }
 
@@ -60,7 +63,7 @@ class _CarouselPageState extends State<CarouselPage> {
   void dispose() {
     // Properly dispose all video controllers to prevent memory leaks
     for (var controller in videoPlayerControllers.values) {
-      controller.dispose();
+      controller.player.dispose();
     }
     videoPlayerControllers.clear();
     pageController.dispose();
@@ -189,20 +192,17 @@ class _CarouselPageState extends State<CarouselPage> {
               Post currentPost = widget.posts[index];
               if (currentPost.isWebm) {
                 if (videoPlayerControllers[index] == null) {
-                  videoPlayerControllers[index] = VlcPlayerController.network(
-                    currentPost.getImageUrl(widget.board)!,
-                    hwAcc: HwAcc.full,
-                    autoPlay: true,
-                    options: VlcPlayerOptions(
-                      advanced: VlcAdvancedOptions([
-                        VlcAdvancedOptions.networkCaching(1500),
-                      ]),
-                      video: VlcVideoOptions([
-                        VlcVideoOptions.dropLateFrames(true),
-                        VlcVideoOptions.skipFrames(true),
-                      ]),
-                    ),
-                  );
+                  final player = Player();
+                  player.open(Media(currentPost.getImageUrl(widget.board)!));
+                  // Auto play if it's the current index (though PageView logic handles this mostly via onPageChanged, 
+                  // but for the first load we might need it)
+                  if (index == currentIndex) {
+                    player.play();
+                  } else {
+                    player.pause(); // Ensure others are paused
+                  }
+                  
+                  videoPlayerControllers[index] = VideoController(player);
                 }
                 return PhotoViewGalleryPageOptions.customChild(
                   child: WebmViewerPage(

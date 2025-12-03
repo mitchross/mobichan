@@ -60,6 +60,7 @@ post_install do |installer|
 
       # Fix potential build warnings
       config.build_settings['CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER'] = 'NO'
+      config.build_settings['CLANG_ALLOW_NON_MODULAR_INCLUDES_IN_FRAMEWORK_MODULES'] = 'YES'
       config.build_settings['DEAD_CODE_STRIPPING'] = 'YES'
     end
   end

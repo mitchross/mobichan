@@ -1,20 +1,12 @@
-/// Open source credits and use from https://github.com/solid-software/flutter_vlc_player/blob/master/flutter_vlc_player/example/lib/controls_overlay.dart
-library;
 import 'package:flutter/material.dart';
-import 'package:flutter_vlc_player/flutter_vlc_player.dart';
+import 'package:media_kit_video/media_kit_video.dart';
 
 class VideoPlayerControlsWidget extends StatelessWidget {
-  const VideoPlayerControlsWidget({super.key, this.controller});
+  const VideoPlayerControlsWidget({super.key, required this.controller});
 
-  final VlcPlayerController? controller;
+  final VideoController controller;
 
-  //static const double _playButtonIconSize = 80;
   static const double _replayButtonIconSize = 100;
-  //static const double _seekButtonIconSize = 48;
-
-  //static const Duration _seekStepForward = Duration(seconds: 10);
-  //static const Duration _seekStepBackward = Duration(seconds: -10);
-
   static const Color _iconColor = Colors.white;
 
   @override
@@ -22,9 +14,12 @@ class VideoPlayerControlsWidget extends StatelessWidget {
     return AnimatedSwitcher(
       duration: const Duration(milliseconds: 50),
       reverseDuration: const Duration(milliseconds: 200),
-      child: Builder(
-        builder: (ctx) {
-          if (controller!.value.isEnded || controller!.value.hasError) {
+      child: StreamBuilder<bool>(
+        stream: controller.player.stream.completed,
+        builder: (context, completedSnapshot) {
+          final isEnded = completedSnapshot.data ?? false;
+
+          if (isEnded) {
             return Center(
               child: FittedBox(
                 child: IconButton(
@@ -37,53 +32,55 @@ class VideoPlayerControlsWidget extends StatelessWidget {
             );
           }
 
-          switch (controller!.value.playingState) {
-            case PlayingState.initialized:
-            case PlayingState.stopped:
-            case PlayingState.paused:
-              return GestureDetector(onTap: _play);
+          return StreamBuilder<bool>(
+            stream: controller.player.stream.playing,
+            builder: (context, playingSnapshot) {
+              final isPlaying = playingSnapshot.data ?? false;
+              // Also check buffering if possible, but simple play/pause is often enough.
+              // media_kit has stream.buffering
 
-            case PlayingState.buffering:
-            case PlayingState.playing:
-              return GestureDetector(onTap: _pause);
+              return StreamBuilder<bool>(
+                stream: controller.player.stream.buffering,
+                builder: (context, bufferingSnapshot) {
+                  final isBuffering = bufferingSnapshot.data ?? false;
 
-            case PlayingState.ended:
-            case PlayingState.error:
-              return Center(
-                child: FittedBox(
-                  child: IconButton(
-                    onPressed: _replay,
-                    color: _iconColor,
-                    iconSize: _replayButtonIconSize,
-                    icon: const Icon(Icons.replay),
-                  ),
-                ),
+                  if (isBuffering) {
+                     // Optional: show loading indicator or just pause icon if you prefer
+                     // But usually tap to pause/play is what we want overlaying everything
+                  }
+
+                  if (isPlaying) {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _pause,
+                      child: const SizedBox.expand(),
+                    );
+                  } else {
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: _play,
+                      child: const SizedBox.expand(), // Make sure it covers the area
+                    );
+                  }
+                },
               );
-            default:
-              return const SizedBox.shrink();
-          }
+            },
+          );
         },
       ),
     );
   }
 
   Future<void> _play() {
-    return controller!.play();
+    return controller.player.play();
   }
 
   Future<void> _replay() async {
-    await controller!.stop();
-    await controller!.play();
+    await controller.player.seek(Duration.zero);
+    await controller.player.play();
   }
 
   Future<void> _pause() async {
-    if (controller!.value.isPlaying) {
-      await controller!.pause();
-    }
+    await controller.player.pause();
   }
-
-  /// Returns a callback which seeks the video relative to current playing time.
-  // Future<void> _seekRelative(Duration seekStep) async {
-  //   await controller!.seekTo(controller!.value.position + seekStep);
-  // }
 }
