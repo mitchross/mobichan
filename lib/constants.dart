@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 const String appTitle = "Mobichan";
 const String captchaSiteKey = "6Ldp2bsSAAAAAAJ5uyx_lx34lJeEpTLVkP5k04qc";
+const String userAgent = "Mobichan/4.0.0";
 
 // RegExps
 RegExp filenameRegExp = RegExp(r"[^/\\&\?]+\.\w{3,4}(?=([\?&].*$|$))");

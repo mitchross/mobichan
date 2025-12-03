@@ -111,7 +111,10 @@ class _CarouselPageState extends State<CarouselPage> {
 
       var response = await Dio().get(
         imageUrl,
-        options: Options(responseType: ResponseType.bytes),
+        options: Options(
+          responseType: ResponseType.bytes,
+          headers: {'User-Agent': userAgent},
+        ),
       );
 
       await Gal.putImageBytes(
@@ -129,7 +132,10 @@ class _CarouselPageState extends State<CarouselPage> {
     try {
       var response = await Dio().get(
         imageUrl,
-        options: Options(responseType: ResponseType.bytes),
+        options: Options(
+          responseType: ResponseType.bytes,
+          headers: {'User-Agent': userAgent},
+        ),
       );
 
       final directory = await getTemporaryDirectory();
@@ -214,6 +220,7 @@ class _CarouselPageState extends State<CarouselPage> {
                 return PhotoViewGalleryPageOptions(
                   imageProvider: NetworkImage(
                     widget.posts[index].getImageUrl(widget.board)!,
+                    headers: const {'User-Agent': userAgent},
                   ),
                   heroAttributes: PhotoViewHeroAttributes(tag: "image$index"),
                 );

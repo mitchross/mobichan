@@ -94,6 +94,7 @@ extension ThreadsPageBuilders on ThreadsPage {
 
   Widget getListView(List<Post> threads, Sort sort) {
     return ListView.separated(
+      primary: true,
       physics: const BouncingScrollPhysics(),
       itemCount: threads.length,
       separatorBuilder: (context, index) => const Divider(
@@ -130,6 +131,7 @@ extension ThreadsPageBuilders on ThreadsPage {
       return Container(
         color: Theme.of(context).dividerColor,
         child: MasonryGridView.builder(
+          primary: true,
           itemCount: threads.length,
           mainAxisSpacing: 1,
           crossAxisSpacing: 1,
@@ -146,6 +148,7 @@ extension ThreadsPageBuilders on ThreadsPage {
 
   Widget buildLoading() {
     return ListView.builder(
+      primary: true,
       itemBuilder: (context, index) =>
           ResponsiveWidth(child: ThreadWidget.shimmer),
     );

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:shimmer/shimmer.dart';
 
+import 'package:mobichan/constants.dart';
 import 'image_widget.dart';
 
 extension ImageWidgetBuilders on ImageWidgetState {
@@ -25,13 +26,21 @@ extension ImageWidgetBuilders on ImageWidgetState {
         CachedNetworkImage(
           fit: crop ? BoxFit.fitHeight :  BoxFit.cover,
           imageUrl: imageUrl,
+          httpHeaders: const {'User-Agent': userAgent},
+          errorWidget: (context, url, error) => const Center(
+            child: Icon(Icons.broken_image, color: Colors.grey),
+          ),
           placeholder: (context, url) {
             return Image.network(
               widget.post.getThumbnailUrl(widget.board)!,
               fit: BoxFit.cover,
+              headers: const {'User-Agent': userAgent},
               loadingBuilder: (context, widget, progress) {
                 return buildLoading();
               },
+              errorBuilder: (context, error, stackTrace) => const Center(
+                child: Icon(Icons.broken_image, color: Colors.grey),
+              ),
             );
           },
           fadeInDuration: Duration.zero,
