@@ -61,7 +61,7 @@ extension ImageWidgetBuilders on ImageWidgetState {
           },
           fadeInDuration: Duration.zero,
         ),
-        if (widget.post.isWebm)
+        if (widget.post.isVideo)
           const Center(
             child: Icon(
               Icons.play_circle_outline,

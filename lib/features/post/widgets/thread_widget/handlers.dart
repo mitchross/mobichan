@@ -55,6 +55,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
   void handleShare() async {
     try {
       final threadUrl = 'https://boards.4channel.org/${board.board}/thread/${thread.no}';
+      // ignore: deprecated_member_use
       await Share.share(
         threadUrl,
         subject: thread.sub ?? 'Thread from Mobichan',

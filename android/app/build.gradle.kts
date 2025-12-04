@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.lucasgoudin.mobichan"
+    namespace = "me.vanillax.mobichan"
     compileSdk = 36
     // Align with plugin-required NDK version
     ndkVersion = "27.0.12077973"
@@ -28,7 +28,7 @@ android {
     }
 
     defaultConfig {
-        applicationId = "com.lucasgoudin.mobichan"
+        applicationId = "me.vanillax.mobichan"
         // Android 9+ for modern ART JIT/AOT optimizations and better performance
         minSdk = 28
         targetSdk = 36

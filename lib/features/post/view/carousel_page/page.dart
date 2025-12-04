@@ -17,7 +17,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:photo_view/photo_view.dart';
 import 'package:photo_view/photo_view_gallery.dart';
 import 'package:share_plus/share_plus.dart';
-import 'package:url_launcher/url_launcher.dart';
+
 
 import '../webm_viewer_page/page.dart';
 
@@ -145,6 +145,7 @@ class _CarouselPageState extends State<CarouselPage> {
       await imagePath.writeAsBytes(response.data);
 
       // Share with proper MIME type
+      // ignore: deprecated_member_use
       await Share.shareXFiles(
         [XFile(imagePath.path)],
         text: 'Shared from Mobichan - https://boards.4channel.org/${widget.board.board}/thread/${currentPost.no}',
@@ -186,7 +187,7 @@ class _CarouselPageState extends State<CarouselPage> {
             pageController: pageController,
             builder: (BuildContext context, int index) {
               Post currentPost = widget.posts[index];
-              if (currentPost.isWebm) {
+              if (currentPost.isVideo) {
                 if (videoPlayerControllers[index] == null) {
                   final player = Player();
                   player.open(Media(currentPost.getImageUrl(widget.board)!));

@@ -10,6 +10,8 @@ class PackageInfoCubit extends Cubit<PackageInfoState> {
       : super(const PackageInfoInitial());
 
   void getPackageInfo() async {
-    emit(PackageInfoLoaded(packageInfo));
+    if (!isClosed) {
+      emit(PackageInfoLoaded(packageInfo));
+    }
   }
 }

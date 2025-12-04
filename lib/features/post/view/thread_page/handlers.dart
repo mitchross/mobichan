@@ -22,6 +22,7 @@ extension ThreadPageHandlers on ThreadPage {
   }
 
   void handleShare(Board board, Post thread) async { // Added async
+    // ignore: deprecated_member_use
     await Share.share( // Added await, Replaced Share.share
         'https://boards.4channel.org/${board.board}/thread/${thread.no}');
   }

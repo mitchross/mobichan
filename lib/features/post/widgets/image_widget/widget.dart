@@ -141,7 +141,7 @@ class ImageWidgetState extends State<ImageWidget> {
                     highResolutionThumbnailsWifi) ||
                 (connectivityStatus == ConnectivityResult.mobile &&
                     highResolutionThumbnailsMobile))) &&
-        !post.isWebm) {
+        !post.isVideo) {
       return post.getImageUrl(board)!;
     } else {
       return post.getThumbnailUrl(board)!;

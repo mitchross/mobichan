@@ -7,7 +7,7 @@ import 'package:mobichan/constants.dart';
 import 'package:mobichan/home.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 
-import 'core/core.dart';
+
 import 'features/setting/setting.dart';
 import 'features/post/post.dart';
 

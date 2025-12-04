@@ -132,6 +132,10 @@ class Post extends Equatable {
     return ext == '.webm';
   }
 
+  bool get isVideo {
+    return ext == '.webm' || ext == '.mp4';
+  }
+
   String get displayTitle {
     return sub ?? com ?? '';
   }

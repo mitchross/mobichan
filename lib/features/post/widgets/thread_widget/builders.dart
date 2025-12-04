@@ -5,7 +5,7 @@ import 'package:mobichan/core/extensions/string_extension.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/constants.dart';
 import 'package:mobichan/localization.dart';
-import 'package:mobichan_domain/mobichan_domain.dart';
+
 import 'package:easy_localization/easy_localization.dart';
 
 extension ThreadWidgetBuilders on ThreadWidget {

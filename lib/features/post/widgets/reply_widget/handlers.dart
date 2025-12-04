@@ -139,6 +139,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
 
         // Share with both the screenshot and the post URL
         final postUrl = 'https://boards.4channel.org/${board.board}/thread/${post.resto}#p${post.no}';
+        // ignore: deprecated_member_use
         await Share.shareXFiles(
           [XFile(imagePath.path)],
           text: 'Mobichan post: $postUrl',
