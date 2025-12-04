@@ -65,28 +65,26 @@ class RepliesPage extends StatelessWidget {
                   Flexible(
                     child: Container(
                       color: Theme.of(context).scaffoldBackgroundColor,
-                      child: Scrollbar(
-                        child: ListView.separated(
-                          separatorBuilder: (context, index) => const Divider(
-                            height: 0,
-                          ),
-                          shrinkWrap: true,
-                          itemCount: lastReplies.length,
-                          itemBuilder: (context, index) {
-                            Post reply = lastReplies[index];
-                            return Padding(
-                              padding: const EdgeInsets.all(8),
-                              child: ReplyWidget(
-                                board: board,
-                                post: reply,
-                                replyingTo: repliesHistory.last.replyingTo,
-                                threadReplies: threadReplies,
-                                inDialog: true,
-                                showReplies: true,
-                              ),
-                            );
-                          },
+                      child: ListView.separated(
+                        separatorBuilder: (context, index) => const Divider(
+                          height: 0,
                         ),
+                        shrinkWrap: true,
+                        itemCount: lastReplies.length,
+                        itemBuilder: (context, index) {
+                          Post reply = lastReplies[index];
+                          return Padding(
+                            padding: const EdgeInsets.all(8),
+                            child: ReplyWidget(
+                              board: board,
+                              post: reply,
+                              replyingTo: repliesHistory.last.replyingTo,
+                              threadReplies: threadReplies,
+                              inDialog: true,
+                              showReplies: true,
+                            ),
+                          );
+                        },
                       ),
                     ),
                   ),

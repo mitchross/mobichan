@@ -38,7 +38,8 @@ class ReplyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Screenshot(
       controller: screenshotController,
-      child: Material(
+      child: RepaintBoundary(
+        child: Material(
         color: post.isMine ? Colors.white.withValues(alpha: 0.05) : null,
         child: Padding(
           padding: const EdgeInsets.all(8.0),
@@ -96,6 +97,8 @@ class ReplyWidget extends StatelessWidget {
             ],
           ),
         ),
+        ),
+      ),
       ),
     );
   }

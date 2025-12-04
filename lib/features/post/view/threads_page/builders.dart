@@ -48,15 +48,13 @@ extension ThreadsPageBuilders on ThreadsPage {
           if (state is SortLoaded) {
             return RefreshIndicator(
               onRefresh: () => handleRefresh(context, state),
-              child: Scrollbar(
-                child: SettingProvider(
-                  settingTitle: 'grid_view',
-                  builder: (isGridView) {
-                    return isGridView.value
-                        ? getGridView(threads, sort)
-                        : getListView(threads, sort);
-                  },
-                ),
+              child: SettingProvider(
+                settingTitle: 'grid_view',
+                builder: (isGridView) {
+                  return isGridView.value
+                      ? getGridView(threads, sort)
+                      : getListView(threads, sort);
+                },
               ),
             );
           } else {

@@ -33,6 +33,13 @@ class _ThreadsPageState extends State<ThreadsPage> {
                     threadsState,
                     threadsCountHistory,
                   ),
+                  buildWhen: (previous, current) {
+                    // Only rebuild if the list of threads changes or we switch from loading/error to loaded
+                    if (current is ThreadsLoaded && previous is ThreadsLoaded) {
+                      return current.threads != previous.threads;
+                    }
+                    return current != previous;
+                  },
                   builder: (context, threadsState) {
                     if (threadsState is ThreadsLoaded) {
                       return widget.buildLoaded(

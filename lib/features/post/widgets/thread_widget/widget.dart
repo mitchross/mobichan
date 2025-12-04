@@ -37,7 +37,8 @@ class ThreadWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Screenshot(
       controller: screenshotController,
-      child: Material(
+      child: RepaintBoundary(
+        child: Material(
         child: Stack(
           children: [
             Wrap(
@@ -65,6 +66,8 @@ class ThreadWidget extends StatelessWidget {
               ),
           ],
         ),
+        ),
+      ),
       ),
     );
   }

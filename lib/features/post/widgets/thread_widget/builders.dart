@@ -3,7 +3,9 @@ import 'package:flutter_html/flutter_html.dart';
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/core/extensions/string_extension.dart';
 import 'package:mobichan/features/post/post.dart';
+import 'package:mobichan/constants.dart';
 import 'package:mobichan/localization.dart';
+import 'package:mobichan_domain/mobichan_domain.dart';
 import 'package:easy_localization/easy_localization.dart';
 
 extension ThreadWidgetBuilders on ThreadWidget {
@@ -141,7 +143,10 @@ extension ThreadWidgetBuilders on ThreadWidget {
     if (board.countryFlags && thread.country != null) {
       return Padding(
         padding: const EdgeInsets.only(right: 6),
-        child: Image.network(thread.countryFlagUrl!),
+        child: Image.network(
+          thread.countryFlagUrl!,
+          headers: const {'User-Agent': userAgent},
+        ),
       );
     } else {
       return Container();
@@ -168,19 +173,19 @@ extension ThreadWidgetBuilders on ThreadWidget {
       itemBuilder: (context) => [
         if (inThread)
           PopupMenuItem(
-            child: const Text(kReplyToPost).tr(),
+            child: Text(kReplyToPost).tr(),
             onTap: () => handleReply(context),
           ),
         PopupMenuItem(
-          child: const Text(kShare).tr(),
+          child: Text(kShare).tr(),
           onTap: () => handleShare(),
         ),
         PopupMenuItem(
-          child: const Text(kSaveToGallery).tr(),
+          child: Text(kSaveToGallery).tr(),
           onTap: () => handleSave(context),
         ),
         PopupMenuItem(
-          child: const Text(kReport).tr(),
+          child: Text(kReport).tr(),
           onTap: () => handleReport(),
         ),
       ],

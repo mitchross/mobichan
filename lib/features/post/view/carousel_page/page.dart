@@ -159,11 +159,6 @@ class _CarouselPageState extends State<CarouselPage> {
     }
   }
 
-  void _searchImage() async {
-    final url = "$reverseImageSearchUrl?image_url=$imageUrl";
-    if (!await launchUrl(Uri.parse(url))) throw 'Could not launch $url';
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -171,11 +166,6 @@ class _CarouselPageState extends State<CarouselPage> {
       appBar: AppBar(
         title: Text('${currentPost.filename}${currentPost.ext}'),
         actions: [
-          if (!currentPost.isWebm)
-            IconButton(
-              onPressed: _searchImage,
-              icon: const Icon(Icons.image_search_rounded),
-            ),
           IconButton(
             onPressed: _shareImage,
             icon: const Icon(Icons.share_rounded),

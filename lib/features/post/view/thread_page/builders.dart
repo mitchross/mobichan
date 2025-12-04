@@ -295,49 +295,47 @@ extension ThreadPageBuilders on ThreadPage {
     required Post thread,
     required List<Post> replies,
   }) {
-    return Scrollbar(
-      child: ScrollablePositionedList.separated(
-        physics: const AlwaysScrollableScrollPhysics(),
-        padding: const EdgeInsets.only(bottom: 120.0),
-        separatorBuilder: (context, index) => const Divider(),
-        itemScrollController: itemScrollController,
-        itemCount: replies.length,
-        itemBuilder: (context, index) {
-          if (index == 0) {
-            return ResponsiveWidth(
-              fullWidth: MediaQuery.of(context).size.width > 600,
-              child: Hero(
-                tag: thread.no,
-                child: ThreadWidget(
-                  thread: thread,
-                  board: board,
-                  inThread: true,
-                  threadContent: ContentWidget(
-                    board: board,
-                    reply: thread,
-                    threadReplies: replies,
-                  ),
-                  onImageTap: () => handleTapThreadImage(
-                    context: context,
-                    board: board,
-                    imagePosts: replies.imagePosts,
-                  ),
-                ),
-              ),
-            );
-          }
-          Post reply = replies[index];
+    return ScrollablePositionedList.separated(
+      physics: const AlwaysScrollableScrollPhysics(),
+      padding: const EdgeInsets.only(bottom: 120.0),
+      separatorBuilder: (context, index) => const Divider(),
+      itemScrollController: itemScrollController,
+      itemCount: replies.length,
+      itemBuilder: (context, index) {
+        if (index == 0) {
           return ResponsiveWidth(
             fullWidth: MediaQuery.of(context).size.width > 600,
-            child: ReplyWidget(
-              board: board,
-              post: reply,
-              threadReplies: replies,
-              showReplies: true,
+            child: Hero(
+              tag: thread.no,
+              child: ThreadWidget(
+                thread: thread,
+                board: board,
+                inThread: true,
+                threadContent: ContentWidget(
+                  board: board,
+                  reply: thread,
+                  threadReplies: replies,
+                ),
+                onImageTap: () => handleTapThreadImage(
+                  context: context,
+                  board: board,
+                  imagePosts: replies.imagePosts,
+                ),
+              ),
             ),
           );
-        },
-      ),
+        }
+        Post reply = replies[index];
+        return ResponsiveWidth(
+          fullWidth: MediaQuery.of(context).size.width > 600,
+          child: ReplyWidget(
+            board: board,
+            post: reply,
+            threadReplies: replies,
+            showReplies: true,
+          ),
+        );
+      },
     );
   }
 
@@ -357,50 +355,48 @@ extension ThreadPageBuilders on ThreadPage {
       ),
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Scrollbar(
-            child: ScrollablePositionedList.builder(
-              physics: const AlwaysScrollableScrollPhysics(),
-              padding: const EdgeInsets.only(bottom: 120.0),
-              itemScrollController: itemScrollController,
-              shrinkWrap: true,
-              itemCount: snapshot.data!.length + 1,
-              itemBuilder: (context, index) {
-                if (index == 0) {
-                  return ResponsiveWidth(
-                    fullWidth: MediaQuery.of(context).size.width > 600,
-                    child: Hero(
-                      tag: thread.no,
-                      child: ThreadWidget(
-                        thread: thread,
-                        board: board,
-                        inThread: true,
-                        threadContent: ContentWidget(
-                          board: board,
-                          reply: thread,
-                          threadReplies: replies,
-                        ),
-                        onImageTap: () => handleTapThreadImage(
-                          context: context,
-                          board: board,
-                          imagePosts: replies.imagePosts,
-                        ),
-                      ),
-                    ),
-                  );
-                }
-                PostWithDepth postWithDepth = snapshot.data![index - 1];
+          return ScrollablePositionedList.builder(
+            physics: const AlwaysScrollableScrollPhysics(),
+            padding: const EdgeInsets.only(bottom: 120.0),
+            itemScrollController: itemScrollController,
+            shrinkWrap: true,
+            itemCount: snapshot.data!.length + 1,
+            itemBuilder: (context, index) {
+              if (index == 0) {
                 return ResponsiveWidth(
                   fullWidth: MediaQuery.of(context).size.width > 600,
-                  child: ReplyWidget(
-                    board: board,
-                    post: postWithDepth.post,
-                    threadReplies: replies,
-                    recursion: postWithDepth.depth,
-                    showReplies: postWithDepth.depth == ThreadPage.maxRecursion,
+                  child: Hero(
+                    tag: thread.no,
+                    child: ThreadWidget(
+                      thread: thread,
+                      board: board,
+                      inThread: true,
+                      threadContent: ContentWidget(
+                        board: board,
+                        reply: thread,
+                        threadReplies: replies,
+                      ),
+                      onImageTap: () => handleTapThreadImage(
+                        context: context,
+                        board: board,
+                        imagePosts: replies.imagePosts,
+                      ),
+                    ),
                   ),
                 );
-              },
-            ),
+              }
+              PostWithDepth postWithDepth = snapshot.data![index - 1];
+              return ResponsiveWidth(
+                fullWidth: MediaQuery.of(context).size.width > 600,
+                child: ReplyWidget(
+                  board: board,
+                  post: postWithDepth.post,
+                  threadReplies: replies,
+                  recursion: postWithDepth.depth,
+                  showReplies: postWithDepth.depth == ThreadPage.maxRecursion,
+                ),
+              );
+            },
           );
         } else {
           return buildLoading(context: context);

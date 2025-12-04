@@ -2,6 +2,7 @@ import 'package:mobichan/localization.dart';
 
 import 'package:flutter/material.dart';
 import 'package:mobichan/features/post/post.dart';
+import 'package:mobichan/constants.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 
@@ -50,7 +51,10 @@ extension ReplyWidgetBuilders on ReplyWidget {
     if (board.countryFlags && post.country != null) {
       return Padding(
         padding: const EdgeInsets.only(right: 6),
-        child: Image.network(post.countryFlagUrl!),
+        child: Image.network(
+          post.countryFlagUrl!,
+          headers: const {'User-Agent': userAgent},
+        ),
       );
     } else {
       return Container();
