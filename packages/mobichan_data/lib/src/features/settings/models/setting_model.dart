@@ -61,12 +61,7 @@ class SettingModel extends Setting {
         type: SettingType.bool,
         group: SettingGroup.general,
       ),
-      const SettingModel(
-        title: 'analytics',
-        value: true,
-        type: SettingType.bool,
-        group: SettingGroup.general,
-      ),
+
       const SettingModel(
         title: 'notifications',
         value: true,
