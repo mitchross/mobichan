@@ -97,7 +97,6 @@ class ReplyWidget extends StatelessWidget {
             ],
           ),
         ),
-        ),
       ),
       ),
     );
