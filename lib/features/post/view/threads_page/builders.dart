@@ -1,7 +1,7 @@
 import 'package:easy_localization/easy_localization.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:mobichan/features/board/board.dart';
+
 import 'package:mobichan/core/core.dart';
 import 'package:mobichan/features/post/post.dart';
 import 'package:mobichan/features/sort/sort.dart';
@@ -25,20 +25,6 @@ extension ThreadsPageBuilders on ThreadsPage {
             }
             if (state is NotSearching) {
               threadsCubit.search('');
-            }
-          },
-        ),
-        BlocListener<TabsCubit, TabsState>(
-          listener: (context, state) {
-            if (state is TabsLoaded) {
-              context.read<ThreadsCubit>().getThreads(state.current, sort);
-            }
-          },
-        ),
-        BlocListener<SortCubit, SortState>(
-          listener: (context, sortState) async {
-            if (sortState is SortLoaded) {
-              context.read<ThreadsCubit>().getThreads(board, sortState.sort);
             }
           },
         ),
@@ -92,6 +78,7 @@ extension ThreadsPageBuilders on ThreadsPage {
 
   Widget getListView(List<Post> threads, Sort sort) {
     return ListView.separated(
+      key: PageStorageKey(board.board),
       primary: true,
       physics: const BouncingScrollPhysics(),
       itemCount: threads.length,
@@ -106,7 +93,7 @@ extension ThreadsPageBuilders on ThreadsPage {
   }
 
   Widget getItemBuilder(
-      context, bool inGrid, index, List<Post> threads, Sort sort) {
+      BuildContext context, bool inGrid, int index, List<Post> threads, Sort sort) {
     Post thread = threads[index];
     return ResponsiveWidth(
       child: InkWell(
@@ -129,6 +116,7 @@ extension ThreadsPageBuilders on ThreadsPage {
       return Container(
         color: Theme.of(context).dividerColor,
         child: MasonryGridView.builder(
+          key: PageStorageKey(board.board),
           primary: true,
           itemCount: threads.length,
           mainAxisSpacing: 1,

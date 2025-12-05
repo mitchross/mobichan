@@ -20,6 +20,8 @@ class BoardTabs extends StatelessWidget {
                 await context
                     .read<TabsCubit>()
                     .setCurrentTab(state.boards[index]);
+                if (!context.mounted) return;
+                Navigator.of(context).pop();
                 await context.read<FavoritesCubit>().getFavorites();
               },
               isScrollable: true,

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
-import 'package:app_installer/app_installer.dart';
+import 'package:open_filex/open_filex.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
 
 import 'package:path_provider/path_provider.dart';
@@ -38,7 +38,7 @@ extension UpdateWidgetHandlers on UpdateWidgetState {
         onReceiveProgress: (received, total) => handleProgress(received, total),
       );
 
-      await AppInstaller.installApk(filePath);
+      await OpenFilex.open(filePath);
     }
   }
 }

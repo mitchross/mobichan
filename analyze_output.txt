@@ -1,0 +1,63 @@
+Analyzing mobichan...                                           
+
+   info • Unnecessary 'this.' qualifier • lib/core/extensions/string_extension.dart:25:18 • unnecessary_this
+   info • Don't use 'BuildContext's across async gaps • lib/features/board/widgets/board_drawer/handlers.dart:24:5 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/board/widgets/board_tabs.dart:23:23 • use_build_context_synchronously
+   info • Invalid use of a private type in a public API • lib/features/captcha/widgets/captcha_slider_widget.dart:21:3 • library_private_types_in_public_api
+   info • Invalid use of a private type in a public API • lib/features/post/view/carousel_page/page.dart:38:3 • library_private_types_in_public_api
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/view/carousel_page/page.dart:108:30 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/view/carousel_page/page.dart:124:28 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/view/carousel_page/page.dart:127:28 • use_build_context_synchronously
+   info • 'onPopInvoked' is deprecated and shouldn't be used. Use onPopInvokedWithResult instead. This feature was deprecated after v3.22.0-12.0.pre • lib/features/post/view/replies_page/page.dart:32:15 • deprecated_member_use
+   info • Missing type annotation • lib/features/post/view/thread_page/builders.dart:73:22 • strict_top_level_inference
+   info • Missing type annotation • lib/features/post/view/thread_page/builders.dart:73:31 • strict_top_level_inference
+   info • Unnecessary use of multiple underscores • lib/features/post/view/thread_page/handlers.dart:62:35 • unnecessary_underscores
+   info • Missing type annotation • lib/features/post/view/threads_page/builders.dart:96:7 • strict_top_level_inference
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/view/threads_page/handlers.dart:19:18 • use_build_context_synchronously
+   info • Invalid use of a private type in a public API • lib/features/post/view/webm_viewer_page/page.dart:14:3 • library_private_types_in_public_api
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:23:7 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:54:35 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:61:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:62:25 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:63:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:64:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:65:32 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:66:29 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:68:24 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:73:32 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:74:27 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:79:17 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:87:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:88:25 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:89:11 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:90:17 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:91:32 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:92:29 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:95:32 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/form_widget/handlers.dart:96:27 • use_build_context_synchronously
+   info • 'onPopInvoked' is deprecated and shouldn't be used. Use onPopInvokedWithResult instead. This feature was deprecated after v3.22.0-12.0.pre • lib/features/post/widgets/form_widget/widget.dart:27:11 • deprecated_member_use
+   info • 'canCut' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:50:9 • deprecated_member_use
+   info • 'handleCut' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:52:26 • deprecated_member_use
+   info • 'canCopy' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:57:9 • deprecated_member_use
+   info • 'handleCopy' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:59:26 • deprecated_member_use
+   info • 'canPaste' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:64:9 • deprecated_member_use
+   info • 'handlePaste' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:66:26 • deprecated_member_use
+   info • 'canSelectAll' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:71:9 • deprecated_member_use
+   info • 'handleSelectAll' is deprecated and shouldn't be used. Use `contextMenuBuilder` instead. This feature was deprecated after v3.3.0-0.5.pre • lib/features/post/widgets/post_text_selection_controls.dart:73:26 • deprecated_member_use
+   info • Unnecessary use of multiple underscores • lib/features/post/widgets/reply_widget/handlers.dart:28:35 • unnecessary_underscores
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:112:30 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:113:41 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:122:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:123:38 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:127:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/reply_widget/handlers.dart:128:36 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:34:30 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:35:41 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:45:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:46:38 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:50:9 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/features/post/widgets/thread_widget/handlers.dart:51:36 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/home.dart:57:13 • use_build_context_synchronously
+   info • Don't use 'BuildContext's across async gaps • lib/home.dart:64:15 • use_build_context_synchronously
+   info • Constructors in '@immutable' classes should be declared as 'const' • packages/mobichan_data/lib/src/features/sort/models/sort_model.dart:4:3 • prefer_const_constructors_in_immutables
+

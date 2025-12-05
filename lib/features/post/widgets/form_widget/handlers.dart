@@ -20,6 +20,7 @@ extension FormWidgetHandlers on FormWidget {
     final result = await FilePicker.platform.pickFiles(type: FileType.image);
     if (result != null) {
       final file = File(result.files.single.path!);
+      if (!context.mounted) return;
       context.read<PostFormCubit>().setFile(file);
     }
   }
@@ -51,6 +52,7 @@ extension FormWidgetHandlers on FormWidget {
     if (result != null) {
       if (thread == null) {
         try {
+          if (!context.mounted) return;
           final newThread = await context.read<ThreadsCubit>().postThread(
                 board: board,
                 post: post,
@@ -58,6 +60,7 @@ extension FormWidgetHandlers on FormWidget {
                 response: result.attempt,
                 file: form.file,
               );
+          if (!context.mounted) return;
           context.read<PostFormCubit>().setVisible(false);
           FocusScope.of(context).unfocus();
           context.read<PostFormCubit>().clear();
@@ -70,12 +73,14 @@ extension FormWidgetHandlers on FormWidget {
             arguments: ThreadPageArguments(board: board, thread: newThread),
           );
         } on ChanException catch (error) {
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             errorSnackbar(context, error.errorMessage.removeHtmlTags),
           );
         }
       } else {
         try {
+          if (!context.mounted) return;
           await context.read<RepliesCubit>().postReply(
                 board: board,
                 post: post,
@@ -84,14 +89,17 @@ extension FormWidgetHandlers on FormWidget {
                 response: result.attempt,
                 file: form.file,
               );
+          if (!context.mounted) return;
           context.read<PostFormCubit>().setVisible(false);
           FocusScope.of(context).unfocus();
           context.read<PostFormCubit>().clear();
           await context.read<RepliesCubit>().getReplies(board, thread);
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             successSnackbar(context, kPostSuccessful.tr()),
           );
         } on ChanException catch (error) {
+          if (!context.mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
             errorSnackbar(context, error.errorMessage.removeHtmlTags),
           );

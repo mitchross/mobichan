@@ -59,7 +59,7 @@ extension ThreadPageHandlers on ThreadPage {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
-        pageBuilder: (context, _, __) => CarouselPage(
+        pageBuilder: (context, animation, secondaryAnimation) => CarouselPage(
           board: board,
           posts: imagePosts,
           imageIndex: 0,

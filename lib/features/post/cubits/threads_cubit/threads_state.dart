@@ -20,14 +20,19 @@ class ThreadsLoading extends ThreadsState {
 
 class ThreadsLoaded extends ThreadsState {
   final List<Post> threads;
+  final Board? board;
+  final Sort? sort;
   final bool shouldRefresh;
+
   const ThreadsLoaded(
     this.threads, {
+    this.board,
+    this.sort,
     this.shouldRefresh = true,
   });
 
   @override
-  List<Object?> get props => [threads];
+  List<Object?> get props => [threads, board, sort, shouldRefresh];
 }
 
 class ThreadsError extends ThreadsState {

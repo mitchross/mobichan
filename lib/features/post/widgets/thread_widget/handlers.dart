@@ -31,6 +31,7 @@ extension ThreadWidgetHandlers on ThreadWidget {
     try {
       final hasAccess = await Gal.requestAccess();
       if (!hasAccess) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(errorSnackbar(context, kSavePostError.tr()));
         return;
@@ -41,11 +42,13 @@ extension ThreadWidgetHandlers on ThreadWidget {
         name: "post_${thread.no}",
         album: "Mobichan",
       );
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
     } on GalException catch (e) {
       log(e.type.message);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

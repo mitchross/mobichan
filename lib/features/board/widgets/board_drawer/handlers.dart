@@ -21,10 +21,12 @@ extension BoardDrawerHandlers on BoardDrawer {
       await favoriteCubit.addToFavorites(board);
       tabsCubit.addTab(board);
     }
+    if (!context.mounted) return;
     context.read<FavoritesCubit>().getFavorites();
   }
 
   void handleOnHistoryTap(BuildContext context, Post thread) {
+    if (!context.mounted) return;
     Navigator.of(context).pushNamed(
       ThreadPage.routeName,
       arguments: ThreadPageArguments(

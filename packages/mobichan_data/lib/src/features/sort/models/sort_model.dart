@@ -1,7 +1,7 @@
 import 'package:mobichan_domain/mobichan_domain.dart';
 
 class SortModel extends Sort {
-  SortModel({required super.order});
+  const SortModel({required super.order});
 
   factory SortModel.fromEntity(Sort sort) {
     return SortModel(order: sort.order);

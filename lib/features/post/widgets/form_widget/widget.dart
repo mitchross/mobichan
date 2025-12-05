@@ -24,7 +24,7 @@ class FormWidget extends StatelessWidget {
         );
         return PopScope( // Replaced WillPopScope
           canPop: false, // Set to false for complex logic
-          onPopInvoked: (bool didPop) async {
+          onPopInvokedWithResult: (bool didPop, dynamic result) async {
             if (didPop) {
               return;
             }

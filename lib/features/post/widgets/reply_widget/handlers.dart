@@ -25,7 +25,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
     Navigator.of(context).push(
       PageRouteBuilder(
         opaque: false,
-        pageBuilder: (context, _, __) => CarouselPage(
+        pageBuilder: (context, animation, secondaryAnimation) => CarouselPage(
           board: board,
           posts: imagePosts,
           imageIndex: imageIndex,
@@ -109,6 +109,7 @@ extension ReplyWidgetHandlers on ReplyWidget {
     try {
       final hasAccess = await Gal.requestAccess();
       if (!hasAccess) {
+        if (!context.mounted) return;
         ScaffoldMessenger.of(context)
             .showSnackBar(errorSnackbar(context, kSavePostError.tr()));
         return;
@@ -118,11 +119,13 @@ extension ReplyWidgetHandlers on ReplyWidget {
         image!,
         name: "post_${post.no}",
       );
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(successSnackbar(context, kSavePostSuccess.tr()));
     } on GalException catch (e) {
       log(e.type.message);
+      if (!context.mounted) return;
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(errorSnackbar(context, kSavePostError.tr()));

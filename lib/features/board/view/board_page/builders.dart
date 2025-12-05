@@ -7,6 +7,7 @@ import 'package:mobichan/features/sort/sort.dart';
 import 'package:mobichan/localization.dart';
 import 'package:easy_localization/easy_localization.dart';
 import 'package:mobichan_domain/mobichan_domain.dart';
+import 'package:mobichan/features/setting/setting.dart';
 
 extension BoardPageBuilders on BoardPage {
   PreferredSize buildAppBar(BuildContext context, Board board) {
@@ -53,6 +54,25 @@ extension BoardPageBuilders on BoardPage {
               IconButton(
                 onPressed: () => handleSearchIconPressed(context),
                 icon: const Icon(Icons.search),
+              ),
+              SettingProvider(
+                settingTitle: 'grid_view',
+                builder: (setting) {
+                  return IconButton(
+                    onPressed: () {
+                      final newSetting = Setting(
+                        title: setting.title,
+                        value: !setting.value,
+                        type: setting.type,
+                        group: setting.group,
+                      );
+                      context.read<SettingsCubit>().updateSetting(newSetting);
+                    },
+                    icon: Icon(
+                      setting.value ? Icons.view_list : Icons.grid_view,
+                    ),
+                  );
+                },
               ),
               buildPopupMenu(),
             ],

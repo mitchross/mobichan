@@ -70,7 +70,7 @@ extension ThreadPageBuilders on ThreadPage {
     );
   }
 
-  void buildListener(context, repliesState) {
+  void buildListener(BuildContext context, RepliesState repliesState) {
     if (repliesState is RepliesLoaded) {
       final replies = repliesState.replies;
       repliesCountHistory.add(replies.length);

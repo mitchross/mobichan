@@ -18,7 +18,7 @@ class CaptchaSliderWidget extends StatefulWidget {
   });
 
   @override
-  _CaptchaSliderWidgetState createState() => _CaptchaSliderWidgetState();
+  State<CaptchaSliderWidget> createState() => _CaptchaSliderWidgetState();
 }
 
 class _CaptchaSliderWidgetState extends State<CaptchaSliderWidget> {

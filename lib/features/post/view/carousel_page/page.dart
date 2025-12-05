@@ -35,7 +35,7 @@ class CarouselPage extends StatefulWidget {
   });
 
   @override
-  _CarouselPageState createState() => _CarouselPageState();
+  State<CarouselPage> createState() => _CarouselPageState();
 }
 
 class _CarouselPageState extends State<CarouselPage> {
@@ -105,7 +105,9 @@ class _CarouselPageState extends State<CarouselPage> {
     try {
       final hasAccess = await Gal.requestAccess();
       if (!hasAccess) {
-        ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
+        if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
+      ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
         return;
       }
 
@@ -121,9 +123,13 @@ class _CarouselPageState extends State<CarouselPage> {
         Uint8List.fromList(response.data),
         name: '${currentPost.filename}${currentPost.ext}',
       );
+      if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(true));
     } on GalException catch (e) {
       log(e.type.message);
+      if (!context.mounted) return;
+      // ignore: use_build_context_synchronously
       ScaffoldMessenger.of(context).showSnackBar(buildSnackBar(false));
     }
   }

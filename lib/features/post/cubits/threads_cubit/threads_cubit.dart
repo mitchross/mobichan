@@ -13,16 +13,21 @@ class ThreadsCubit extends Cubit<ThreadsState> {
   final PostRepository repository;
   late List<Post> threads;
 
+  Board? currentBoard;
+  Sort? currentSort;
+
   ThreadsCubit({required this.repository}) : super(const ThreadsInitial());
 
   Future<void> getThreads(Board board, Sort sort) async {
     try {
+      currentBoard = board;
+      currentSort = sort;
       if (state is ThreadsInitial) {
         emit(const ThreadsLoading());
       }
       threads = await repository.getThreads(board: board, sort: sort);
       await repository.insertPosts(board, threads);
-      emit(ThreadsLoaded(threads));
+      emit(ThreadsLoaded(threads, board: board, sort: sort));
     } on NetworkException {
       emit(ThreadsError(kThreadsLoadingError.tr()));
     }
@@ -49,7 +54,7 @@ class ThreadsCubit extends Cubit<ThreadsState> {
 
   void search(String input) {
     if (input == "") {
-      emit(ThreadsLoaded(threads));
+      emit(ThreadsLoaded(threads, board: currentBoard, sort: currentSort));
     } else {
       final filteredThreads = threads
           .where((thread) =>
@@ -62,6 +67,8 @@ class ThreadsCubit extends Cubit<ThreadsState> {
           .toList();
       emit(ThreadsLoaded(
         filteredThreads,
+        board: currentBoard,
+        sort: currentSort,
         shouldRefresh: false,
       ));
     }

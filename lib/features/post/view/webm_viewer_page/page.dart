@@ -11,7 +11,7 @@ class WebmViewerPage extends StatefulWidget {
   const WebmViewerPage(this.post, this.videoPlayerController, {super.key});
 
   @override
-  _VideoViewerPageState createState() => _VideoViewerPageState();
+  State<WebmViewerPage> createState() => _VideoViewerPageState();
 }
 
 class _VideoViewerPageState extends State<WebmViewerPage> {

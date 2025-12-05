@@ -47,30 +47,31 @@ class PostTextSelectionControls extends MaterialTextSelectionControls {
     final TextSelection selection = delegate.textEditingValue.selection;
 
     // Add standard buttons based on availability
-    if (canCut(delegate)) {
+    // Add standard buttons based on availability
+    if (delegate.cutEnabled && !delegate.textEditingValue.selection.isCollapsed) {
       buttonItems.add(ContextMenuButtonItem(
-        onPressed: () => handleCut(delegate),
+        onPressed: () => delegate.cutSelection(SelectionChangedCause.toolbar),
         type: ContextMenuButtonType.cut,
       ));
     }
 
-    if (canCopy(delegate)) {
+    if (delegate.copyEnabled && !delegate.textEditingValue.selection.isCollapsed) {
       buttonItems.add(ContextMenuButtonItem(
-        onPressed: () => handleCopy(delegate),
+        onPressed: () => delegate.copySelection(SelectionChangedCause.toolbar),
         type: ContextMenuButtonType.copy,
       ));
     }
 
-    if (canPaste(delegate)) {
+    if (delegate.pasteEnabled) {
       buttonItems.add(ContextMenuButtonItem(
-        onPressed: () => handlePaste(delegate),
+        onPressed: () => delegate.pasteText(SelectionChangedCause.toolbar),
         type: ContextMenuButtonType.paste,
       ));
     }
 
-    if (canSelectAll(delegate)) {
+    if (delegate.selectAllEnabled) {
       buttonItems.add(ContextMenuButtonItem(
-        onPressed: () => handleSelectAll(delegate),
+        onPressed: () => delegate.selectAll(SelectionChangedCause.toolbar),
         type: ContextMenuButtonType.selectAll,
       ));
     }

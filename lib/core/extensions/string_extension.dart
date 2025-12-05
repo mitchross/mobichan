@@ -22,8 +22,7 @@ extension StringExtension on String {
 
   String get unescapeHtml {
     // Use html package's built-in unescape instead of html_unescape package
-    final text = this
-        .replaceAll('&lt;', '<')
+    final text = replaceAll('&lt;', '<')
         .replaceAll('&gt;', '>')
         .replaceAll('&amp;', '&')
         .replaceAll('&quot;', '"')

@@ -1,3 +1,5 @@
+import 'package:equatable/equatable.dart';
+
 enum Order {
   byBump,
   byReplies,
@@ -6,7 +8,7 @@ enum Order {
   byOld,
 }
 
-class Sort {
+class Sort extends Equatable {
   final Order order;
 
   const Sort({required this.order});
@@ -14,4 +16,7 @@ class Sort {
   static Sort get initial {
     return const Sort(order: Order.byBump);
   }
+
+  @override
+  List<Object?> get props => [order];
 }

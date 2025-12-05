@@ -16,6 +16,7 @@ extension ThreadsPageHandlers on ThreadsPage {
     Sort sort,
   ) async {
     await context.read<HistoryCubit>().addToHistory(thread, board);
+    if (!context.mounted) return;
     Navigator.of(context).pushNamed(
       ThreadPage.routeName,
       arguments: ThreadPageArguments(board: board, thread: thread),
